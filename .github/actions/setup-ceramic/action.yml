@@ -1,0 +1,42 @@
+name: "Set up Ceramic"
+description: "Downloads Ceramic and makes its CLI available."
+inputs:
+  ceramic-version:
+    description: "Tagged version of Ceramic that will get downloaded."
+    default: "1.6.0"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: "Install Haxe"
+      uses: "krdlab/setup-haxe@v1"
+      with:
+        haxe-version: "4.3.6"
+    - name: "Ensure Haxe is installed"
+      shell: "bash"
+      run: |
+        haxe --version
+        haxelib version
+        neko || true
+    - name: "Set HAXEPATH"
+      shell: "bash"
+      run: |
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          HAXEPATH="$HAXE_STD_PATH\.."
+          echo "$HAXEPATH" >> $GITHUB_PATH
+        else
+          HAXEPATH="$HAXE_STD_PATH/.."
+        fi
+        echo "HAXEPATH=$HAXEPATH" >> $GITHUB_ENV
+    - name: "Fetch the Ceramic installer"
+      shell: "bash"
+      run: "haxelib install ceramic"
+    - name: "Install Ceramic"
+      shell: "bash"
+      run: "haxelib run ceramic setup --global --install --version v${{ inputs.ceramic-version }} 1>& /dev/null"
+    - name: "Make Ceramic a global command"
+      shell: "bash"
+      run: "haxelib run ceramic link"
+    - name: "Install Haxe libraries"
+      shell: "bash"
+      run: "haxelib run ceramic clay libs"

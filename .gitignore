@@ -1,0 +1,13 @@
+.DS_Store
+
+# Intermediate files
+/.haxelib/
+/gen/
+/out/
+
+# Platform-specific artifacts
+/project/
+
+# IDE config
+.vscode/
+/completion.hxml

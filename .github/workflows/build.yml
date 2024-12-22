@@ -1,0 +1,131 @@
+name: "Build"
+on:
+  - "push"
+  - "pull_request"
+
+jobs:
+  windows-amd64:
+    name: "Windows (amd64)"
+    runs-on: "windows-2019"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+        with:
+          lfs: true
+      - name: "Install additional dependencies"
+        run: "choco install upx"
+      - uses: "./.github/actions/setup-ceramic"
+      - name: "Let Ceramic generate some code: typed accessors, platform bindings, etc."
+        shell: "pwsh"
+        run: "try { ceramic clay clean windows } finally { exit 0 }"
+      - name: "Build the game"
+        shell: "pwsh"
+        run: "ceramic clay build windows --setup --assets"
+      - name: "Shrink the executable"
+        shell: "bash"
+        run: |
+          for entry in project/windows/*; do
+            if [[ -f "$entry" ]]; then
+              upx -9 "$entry"
+            fi
+          done
+      - name: "Upload artifact"
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "windows-amd64"
+          path: "project/windows/"
+          if-no-files-found: "error"
+          compression-level: 9
+  linux-amd64:
+    name: "Linux (amd64)"
+    runs-on: "ubuntu-22.04"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+        with:
+          lfs: true
+      - name: "Install additional dependencies"
+        run: |
+          sudo apt-get update
+          sudo apt-get install libsdl2-dev upx-ucl pngcrush
+      - uses: "./.github/actions/setup-ceramic"
+      - name: "Let Ceramic generate some code: typed accessors, platform bindings, etc."
+        shell: "bash"
+        run: "ceramic clay clean linux || true"
+      - name: "Build the game"
+        run: "ceramic clay build linux --setup --assets"
+      - name: "Shrink the executable"
+        shell: "bash"
+        run: |
+          for entry in project/linux/*; do
+            if [[ -f "$entry" ]]; then
+              strip "$entry"
+              upx -9 "$entry"
+            fi
+          done
+      - name: "Bruteforce PNG compression"
+        shell: "bash"
+        run: |
+          shopt -s globstar
+          for input in project/**/*.png; do
+            if [[ -f "$input" ]]; then
+              pngcrush -ow -rem allb --brute -l 9 "$input"
+            fi
+          done
+      - name: "Upload artifact"
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "linux-amd64"
+          path: "project/linux/"
+          if-no-files-found: "error"
+          compression-level: 9
+  web-js:
+    name: "Web"
+    runs-on: "ubuntu-24.04"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+        with:
+          lfs: true
+      - uses: "./.github/actions/setup-ceramic"
+      - name: "Let Ceramic generate some code: typed accessors, platform bindings, etc."
+        shell: "bash"
+        run: "ceramic clay clean web || true"
+      - name: "Build the game"
+        run: "ceramic clay build web --setup --assets"
+      - name: "Install Closure compiler"
+        run: "npm install --global google-closure-compiler"
+      - name: "Minify JS"
+        shell: "bash"
+        run: |
+          for input in project/web/*.js; do
+            if [[ -f "$input" ]]; then
+              google-closure-compiler "$input" \
+                --env BROWSER \
+                --language_in ECMASCRIPT_2015 \
+                --language_out ECMASCRIPT_2021 \
+                --js_output_file closure-temp-file.js
+              rm "$input"
+              mv closure-temp-file.js "$input"
+            fi
+          done
+      - name: "Install additional dependencies"
+        run: |
+          sudo apt-get update
+          sudo apt-get install pngcrush
+      - name: "Bruteforce PNG compression"
+        shell: "bash"
+        run: |
+          shopt -s globstar
+          for input in project/**/*.png; do
+            if [[ -f "$input" ]]; then
+              pngcrush -ow -rem allb --brute -l 9 "$input"
+            fi
+          done
+      - name: "Upload artifact"
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "web"
+          path: "project/web/"
+          if-no-files-found: "error"
+          compression-level: 9

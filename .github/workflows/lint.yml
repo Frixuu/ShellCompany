@@ -1,0 +1,34 @@
+name: "Lint"
+on:
+  - "push"
+  - "pull_request"
+
+jobs:
+  formatting:
+    name: "Formatting"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+      - name: "Install Haxe"
+        uses: "krdlab/setup-haxe@v1"
+        with:
+          haxe-version: "latest"
+      - name: "Install tools"
+        run: "haxelib --global install formatter"
+      - name: "Run formatter"
+        run: "haxelib --global run formatter --check --source src"
+  checkstyle:
+    name: "Static analysis"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+      - name: "Install Haxe"
+        uses: "krdlab/setup-haxe@v1"
+        with:
+          haxe-version: "latest"
+      - name: "Install tools"
+        run: "haxelib --global install checkstyle"
+      - name: "Run Checkstyle"
+        run: "haxelib --global run checkstyle --show-parser-errors --exitcode --source src"

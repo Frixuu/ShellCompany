@@ -1,0 +1,25 @@
+app:
+  package: "frixuu.shellco"
+  name: "shell_company"
+  displayName: "Shell Company"
+  author: "Frixuu"
+  version: "0.1"
+
+  plugins:
+    # - "arcade"
+    # - "ase"
+    # - "sprite"
+    # - "tilemap"
+    # - "ldtk"
+    # - "ui"
+    # - "elements"
+
+  libs:
+
+  defines:
+    - "analyzer_optimize"
+    - "no_debug"
+    - js_es: "6"
+
+  hxml: |
+    --dce full
