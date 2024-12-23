@@ -225,7 +225,7 @@
         "thresholds": [
           {
             "severity": "INFO",
-            "complexity": 8
+            "complexity": 15
           },
           {
             "severity": "WARNING",

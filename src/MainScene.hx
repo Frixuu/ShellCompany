@@ -7,12 +7,13 @@ import ceramic.Quad;
 import ceramic.Scene;
 import ceramic.Shortcuts.*;
 import ceramic.Text;
+import shellco.SceneBase;
 import shellco.visual.SnapTransformComponent;
 
 /**
     Main scene of the project.
 **/
-class MainScene extends Scene {
+class MainScene extends SceneBase {
 
     private var fish: Quad;
     
@@ -20,7 +21,7 @@ class MainScene extends Scene {
         this.assets.add(Images.FISH_DEBUG);
     }
     
-    public override function create() {
+    public override function ready() {
         // Called when scene has finished preloading
         
         fish = new Quad();

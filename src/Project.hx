@@ -8,6 +8,7 @@ import ceramic.Color;
 import ceramic.Entity;
 import ceramic.Filter;
 import ceramic.InitSettings;
+import shellco.LoadingOverlayScene;
 import shellco.PersistentScene;
 
 /**
@@ -58,6 +59,7 @@ class Project extends Entity {
             };
             
             app.scenes.set("persistent", new PersistentScene());
+            app.scenes.set("loading", new LoadingOverlayScene());
         });
     }
 }
