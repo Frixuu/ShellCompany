@@ -162,6 +162,7 @@
         ],
         "modifier": "PUBLIC",
         "excludeNames": [
+          "bindAsComponent",
           "new",
           "toString"
         ]
