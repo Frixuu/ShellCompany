@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
 package;
 
+import assets.Fonts;
 import assets.Shaders;
+import ceramic.App;
 import ceramic.Color;
 import ceramic.Entity;
 import ceramic.Filter;
 import ceramic.InitSettings;
-import ceramic.Shortcuts.*;
+import shellco.PersistentScene;
 
 /**
     The entry point of this Ceramic game.
@@ -34,7 +36,9 @@ class Project extends Entity {
         settings.antialiasing = 0;
         settings.scaling = FIT;
         settings.resizable = true;
+        settings.defaultFont = Fonts.MINOGRAM;
         
+        final app = App.app;
         app.onceDefaultAssetsLoad(this, assets -> {
             assets.add(Shaders.PIXEL_ART_FILTER);
         });
@@ -53,8 +57,7 @@ class Project extends Entity {
                 filter;
             };
             
-            // Set MainScene as the current scene (see MainScene.hx)
-            app.scenes.main = new MainScene();
+            app.scenes.set("persistent", new PersistentScene());
         });
     }
 }

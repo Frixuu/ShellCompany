@@ -2,9 +2,11 @@
 package;
 
 import assets.*;
+import ceramic.Color;
 import ceramic.Quad;
 import ceramic.Scene;
 import ceramic.Shortcuts.*;
+import ceramic.Text;
 import shellco.visual.SnapTransformComponent;
 
 /**
@@ -15,8 +17,7 @@ class MainScene extends Scene {
     private var fish: Quad;
     
     public override function preload() {
-        // Add any asset you want to load here
-        assets.add(Images.FISH_DEBUG);
+        this.assets.add(Images.FISH_DEBUG);
     }
     
     public override function create() {
@@ -41,6 +42,18 @@ class MainScene extends Scene {
             fish.alpha = value;
             fish.scale(value);
         });
+        
+        final text = new Text();
+        text.color = Color.WHITE;
+        text.pointSize = 10;
+        text.anchor(0, 0);
+        text.font = {
+            final font = this.assets.font(Fonts.MINOGRAM);
+            font;
+        };
+        text.content = "Hello World!";
+        text.pos(20, 20);
+        this.add(text);
         
         // Print some log
         log.success("Hello from ceramic :)");
