@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 package shellco.visual;
 
-import assets.Images;
 import ceramic.Assets;
 import ceramic.ParticleEmitter;
 import ceramic.Quad;
@@ -39,7 +38,7 @@ final class BubbleParticleEmitter extends ParticleEmitter {
         
         final quad = new Quad();
         quad.anchor(0.5, 0.5);
-        quad.texture = this.assets.texture(Images.BUBBLE_128PX);
+        quad.texture = this.assets.texture("ui/bubble_128px");
         quad.component("snap", new SnapTransformComponent());
         return quad;
     }

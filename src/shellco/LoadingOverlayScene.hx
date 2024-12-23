@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 package shellco;
 
-import assets.Images;
-import assets.Sounds;
 import ceramic.App;
 import ceramic.Logger;
 import ceramic.Particles;
@@ -27,8 +25,8 @@ final class LoadingOverlayScene extends Scene {
     private var isAnimating: Bool = false;
     
     public override function preload() {
-        this.assets.add(Images.BUBBLE_128PX);
-        this.assets.add(Sounds.BUBBLES_LOOP);
+        this.assets.addImage("ui/bubble_128px");
+        this.assets.addSound("audio/sfx/bubbles_loop");
     }
     
     public override function create() {
@@ -51,7 +49,7 @@ final class LoadingOverlayScene extends Scene {
             particles;
         });
         
-        final sound = this.assets.sound(Sounds.BUBBLES_LOOP);
+        final sound = this.assets.sound("audio/sfx/bubbles_loop");
         final soundPlayer = sound.play(0.0, true, 0.0, null, null);
         soundPlayer.pause();
         

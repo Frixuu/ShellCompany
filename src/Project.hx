@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 package;
 
-import assets.Fonts;
-import assets.Shaders;
 import ceramic.App;
 import ceramic.Color;
 import ceramic.Entity;
@@ -37,11 +35,11 @@ class Project extends Entity {
         settings.antialiasing = 0;
         settings.scaling = FIT;
         settings.resizable = true;
-        settings.defaultFont = Fonts.MINOGRAM;
+        settings.defaultFont = "font:fonts/minogram";
         
         final app = App.app;
         app.onceDefaultAssetsLoad(this, assets -> {
-            assets.add(Shaders.PIXEL_ART_FILTER);
+            assets.addShader("shaders/pixel_art_filter");
         });
         
         app.onceReady(this, () -> {
@@ -50,7 +48,7 @@ class Project extends Entity {
                 final filter = new Filter();
                 filter.size(TARGET_WIDTH, TARGET_HEIGHT);
                 filter.shader = {
-                    final asset = app.assets.shader(Shaders.PIXEL_ART_FILTER);
+                    final asset = app.assets.shader("shaders/pixel_art_filter");
                     final shader = asset.clone();
                     shader.setVec2("resolution", TARGET_WIDTH, TARGET_HEIGHT);
                     shader;
@@ -58,8 +56,12 @@ class Project extends Entity {
                 filter;
             };
             
-            app.scenes.set("persistent", new PersistentScene());
             app.scenes.set("loading", new LoadingOverlayScene());
+            app.scenes.set("persistent", {
+                final scene = new PersistentScene();
+                scene.assets.parent = app.assets;
+                scene;
+            });
         });
     }
 }

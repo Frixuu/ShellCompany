@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 package shellco;
 
-import assets.Fonts;
-import assets.Images;
 import ceramic.App;
 import ceramic.Scene;
 
@@ -12,13 +10,12 @@ import ceramic.Scene;
 final class PersistentScene extends Scene {
 
     public override function preload() {
-        this.assets.add(Images.MINOGRAM);
-        this.assets.add(Fonts.MINOGRAM);
+        this.assets.addImage("fonts/minogram");
     }
     
     public override function create() {
     
-        final fontImageAsset = this.assets.imageAsset(Images.MINOGRAM);
+        final fontImageAsset = this.assets.imageAsset("fonts/minogram");
         fontImageAsset.texture.filter = NEAREST;
         
         final app = App.app;

@@ -4,8 +4,6 @@ package;
 import assets.*;
 import ceramic.Color;
 import ceramic.Quad;
-import ceramic.Scene;
-import ceramic.Shortcuts.*;
 import ceramic.Text;
 import shellco.SceneBase;
 import shellco.visual.SnapTransformComponent;
@@ -49,7 +47,7 @@ class MainScene extends SceneBase {
         text.pointSize = 10;
         text.anchor(0, 0);
         text.font = {
-            final font = this.assets.font(Fonts.MINOGRAM);
+            final font = this.assets.font("fonts/minogram");
             font;
         };
         text.content = "Hello World!";
