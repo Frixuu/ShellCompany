@@ -16,6 +16,15 @@ abstract class SceneBase extends Scene {
     **/
     private final log: Logger = new Logger();
     
+    public override function ready() {
+        App.app.onPostUpdate(this, _ -> {
+            final persistentScene: PersistentScene = cast App.app.scenes.get("persistent");
+            final camera = persistentScene?.mainCamera ?? return;
+            // this.x = Math.round(camera.contentTranslateX);
+            // this.y = Math.round(camera.contentTranslateY);
+        });
+    }
+    
     public override function fadeIn(done: () -> Void) {
     
         final app = App.app;

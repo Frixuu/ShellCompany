@@ -39,7 +39,7 @@ final class BubbleParticleEmitter extends ParticleEmitter {
         final quad = new Quad();
         quad.anchor(0.5, 0.5);
         quad.texture = this.assets.texture("ui/bubble_128px");
-        quad.component("snap", new SnapTransformComponent());
+        quad.roundTranslation = 1;
         return quad;
     }
 }
