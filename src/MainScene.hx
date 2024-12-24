@@ -1,12 +1,16 @@
 // SPDX-License-Identifier: MIT
 package;
 
-import assets.*;
+import ceramic.App;
 import ceramic.Color;
+import ceramic.LdtkVisual;
 import ceramic.Quad;
 import ceramic.Text;
+import ceramic.Tilemap;
+import shellco.PersistentScene;
 import shellco.SceneBase;
-import shellco.visual.SnapTransformComponent;
+
+using ceramic.TilemapPlugin;
 
 /**
     Main scene of the project.
@@ -16,32 +20,14 @@ class MainScene extends SceneBase {
     private var fish: Quad;
     
     public override function preload() {
-        this.assets.add(Images.FISH_DEBUG);
+        this.assets.addImage("levels/SunnyLand_by_Ansimuz-extended");
+        this.assets.addTilemap("levels/platformer_sample");
     }
     
+    public override function create() {}
+    
     public override function ready() {
-        // Called when scene has finished preloading
-        
-        fish = new Quad();
-        fish.texture = {
-            final texture = assets.texture(Images.FISH_DEBUG);
-            texture.filter = NEAREST;
-            texture;
-        };
-        fish.anchor(0.5, 0.5);
-        fish.pos(width * 0.5, height * 0.5);
-        fish.scale(0.0001);
-        fish.alpha = 0;
-        
-        fish.component("moving", new MovingComponent());
-        fish.component("snap", new SnapTransformComponent());
-        this.add(fish);
-        
-        fish.tween(ELASTIC_EASE_IN_OUT, 0.75, 0.0001, 1.0, function(value, time) {
-            fish.alpha = value;
-            fish.scale(value);
-        });
-        
+    
         final text = new Text();
         text.color = Color.WHITE;
         text.pointSize = 10;
@@ -54,8 +40,52 @@ class MainScene extends SceneBase {
         text.pos(20, 20);
         this.add(text);
         
-        // Print some log
-        log.success("Hello from ceramic :)");
+        final tileset = this.assets.imageAsset("levels/SunnyLand_by_Ansimuz-extended");
+        tileset.texture.filter = NEAREST;
+        
+        final arcade = App.app.arcade;
+        arcade.autoUpdateWorldBounds = false;
+        arcade.onUpdate(this, delta -> {
+            // final world = arcade.world;
+        });
+        
+        final persistentScene: PersistentScene = cast App.app.scenes.get("persistent");
+        final camera = persistentScene.mainCamera;
+        camera.targetX = 400;
+        camera.targetY = 300;
+        
+        final ldtkData = this.assets.ldtk("levels/platformer_sample");
+        final level = ldtkData.worlds[0].levels[0];
+        level.ensureLoaded(() -> {
+        
+            final tilemap = new Tilemap();
+            tilemap.depth = 1;
+            tilemap.tilemapData = level.ceramicTilemap;
+            this.add(tilemap);
+            
+            arcade.world.setBounds(0, 0, tilemap.width, tilemap.height);
+            tilemap.initArcadePhysics();
+            tilemap.collidableLayers = ["collidable-up", "collidable"];
+            tilemap.layer("collidable-up")?.checkCollision(true, false, false, false);
+            
+            App.app.onPostUpdate(tilemap, _ -> {
+                tilemap.x = camera.contentTranslateX;
+                tilemap.y = camera.contentTranslateY;
+                tilemap.clipTiles(Math.floor(camera.x - camera.viewportWidth * 0.5),
+                    Math.floor(camera.y - camera.viewportHeight * 0.5),
+                    Math.ceil(camera.viewportWidth) + tilemap.tilemapData.maxTileWidth,
+                    Math.ceil(camera.viewportHeight) + tilemap.tilemapData.maxTileHeight);
+            });
+            
+            level.createVisualsForEntities(tilemap, null, ldtkEntity -> {
+                return if (ldtkEntity.def.isRenderable(Tile)) {
+                    final visual = new LdtkVisual(ldtkEntity);
+                    visual;
+                } else {
+                    null;
+                };
+            });
+        });
     }
     
     public override function update(delta: Float) {

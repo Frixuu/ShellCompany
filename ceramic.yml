@@ -6,11 +6,11 @@ app:
   version: "0.1"
 
   plugins:
-    # - "arcade"
+    - "arcade"
     # - "ase"
-    # - "sprite"
-    # - "tilemap"
-    # - "ldtk"
+    - "sprite"
+    - "tilemap"
+    - "ldtk"
     # - "ui"
     # - "elements"
 

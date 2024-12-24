@@ -38,6 +38,7 @@ final class LoadingOverlayScene extends Scene {
             this.logger.info('Loading animation finished after ${this.timer.round(3)}s');
         });
         
+        this.depth = 1000;
         this.add({
             final emitter = new BubbleParticleEmitter(this.assets);
             final particles = this.particles = new Particles(emitter);
