@@ -28,6 +28,7 @@ class MainScene extends SceneBase {
     }
     
     public override function create() {
+        this.screenSpace = false;
         super.create();
     }
     
@@ -56,8 +57,6 @@ class MainScene extends SceneBase {
         
         final persistentScene: PersistentScene = cast App.app.scenes.get("persistent");
         final camera = persistentScene.mainCamera;
-        // camera.targetX = 400;
-        // camera.targetY = 300;
         
         final ldtkData = this.assets.ldtk("levels/platformer_sample");
         final level = ldtkData.worlds[0].levels[0];
@@ -72,15 +71,17 @@ class MainScene extends SceneBase {
             tilemap.initArcadePhysics();
             tilemap.collidableLayers = ["collisions"];
             
-            App.app.onPostUpdate(tilemap, _ -> {
-                // tilemap.clipTiles(Math.floor(camera.x - camera.viewportWidth * 0.5),
-                //    Math.floor(camera.y - camera.viewportHeight * 0.5),
-                //    Math.ceil(camera.viewportWidth) + tilemap.tilemapData.maxTileWidth,
-                //    Math.ceil(camera.viewportHeight) + tilemap.tilemapData.maxTileHeight);
-            });
+            camera.contentX = level.worldX;
+            camera.contentY = level.worldY;
+            camera.contentWidth = level.pxWid;
+            camera.contentHeight = level.pxHei;
             
-            // tilemap.layer("collisions").visible = false;
-            // tilemap.layer("bg_textures").visible = false;
+            App.app.onPostUpdate(tilemap, _ -> {
+                tilemap.clipTiles(Math.floor(camera.x - camera.viewportWidth * 0.5),
+                    Math.floor(camera.y - camera.viewportHeight * 0.5),
+                    Math.ceil(camera.viewportWidth) + tilemap.tilemapData.maxTileWidth,
+                    Math.ceil(camera.viewportHeight) + tilemap.tilemapData.maxTileHeight);
+            });
             
             level.createVisualsForEntities(tilemap, null, ldtkEntity -> {
                 final entityDef = ldtkEntity.def;

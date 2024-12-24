@@ -34,8 +34,9 @@ final class Player extends Sprite {
         final app = App.app;
         final persistentScene: PersistentScene = cast app.scenes.get("persistent");
         final camera = persistentScene.mainCamera;
-        app.onPostUpdate(this, _ -> camera.target(this.x, this.y));
-        
-        // app.onUpdate(this, _ -> app.logger.debug('i\' m at ${this.x}x${this.y}'));
+        app.onPostUpdate(this, _ -> {
+            camera.followTarget = true;
+            camera.target(this.x, this.y);
+        });
     }
 }
