@@ -7,12 +7,12 @@ app:
 
   plugins:
     - "arcade"
-    # - "ase"
     - "sprite"
+    - "ase"
     - "tilemap"
     - "ldtk"
-    # - "ui"
-    # - "elements"
+    - "ui"
+    - "elements"
 
   libs:
 
