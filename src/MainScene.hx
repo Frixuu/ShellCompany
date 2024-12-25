@@ -51,9 +51,6 @@ class MainScene extends SceneBase {
         
         final arcade = App.app.arcade;
         arcade.autoUpdateWorldBounds = false;
-        arcade.onUpdate(this, delta -> {
-            // final world = arcade.world;
-        });
         
         final persistentScene: PersistentScene = cast App.app.scenes.get("persistent");
         final camera = persistentScene.mainCamera;
@@ -88,7 +85,9 @@ class MainScene extends SceneBase {
                 return if (entityDef.identifier == "player") {
                     final player = new Player(this.assets);
                     player.pos(ldtkEntity.pxX, ldtkEntity.pxY);
-                    player.size(ldtkEntity.width, ldtkEntity.height);
+                    arcade.onUpdate(player, delta -> {
+                        arcade.world.collide(player, tilemap);
+                    });
                     player;
                 } else if (entityDef.isRenderable(Tile)) {
                     new LdtkVisual(ldtkEntity);

@@ -2047,7 +2047,7 @@
 					"entityInstances": [
 						{
 							"__identifier": "player",
-							"__grid": [4,2],
+							"__grid": [8,11],
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 104, "x": 0, "y": 240, "w": 16, "h": 16 },
@@ -2056,7 +2056,7 @@
 							"width": 24,
 							"height": 24,
 							"defUid": 46,
-							"px": [72,48],
+							"px": [136,192],
 							"fieldInstances": [{ "__identifier": "items", "__type": "Array<LocalEnum.item>", "__value": [ "knife", "boots" ], "__tile": null, "defUid": 51, "realEditorValues": [ {
 								"id": "V_String",
 								"params": ["knife"]
@@ -2064,8 +2064,8 @@
 								"id": "V_String",
 								"params": ["boots"]
 							} ] }],
-							"__worldX": 72,
-							"__worldY": 48
+							"__worldX": 136,
+							"__worldY": 192
 						},
 						{
 							"__identifier": "chest",
