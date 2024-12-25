@@ -25,6 +25,7 @@ class MainScene extends SceneBase {
         this.assets.addImage("levels/SunnyLand_by_Ansimuz-extended");
         this.assets.addTilemap("levels/platformer_sample");
         this.assets.addImage(Images.DANCING_GIRL_SNAP);
+        this.assets.addImage("white");
     }
     
     public override function create() {

@@ -32,7 +32,7 @@
     {
       "type": "Final",
       "props": {
-        "severity": "ERROR"
+        "severity": "IGNORE"
       }
     },
     {

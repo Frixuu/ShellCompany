@@ -20,9 +20,16 @@ final class PersistentScene extends Scene {
     }
     
     public override function create() {
+    
         final fontImageAsset = this.assets.imageAsset("fonts/minogram");
         fontImageAsset.texture.filter = NEAREST;
-        App.app.scenes.set("main", new MainScene());
+        
+        final app = App.app;
+        app.scenes.set("main", {
+            final scene = new MainScene();
+            scene.assets.parent = this.assets;
+            scene;
+        });
     }
     
     public override function ready() {
