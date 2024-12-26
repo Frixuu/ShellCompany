@@ -24,7 +24,7 @@ final class Player extends Quad {
         
         this.color = Color.YELLOW;
         
-        this.size(15, 48);
+        this.size(15, 45);
         this.anchorKeepPosition(0.5, 1.0);
         this.initArcadePhysics();
         this.body.collideWorldBounds = true;

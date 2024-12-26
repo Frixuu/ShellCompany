@@ -4,12 +4,17 @@ package shellco.player;
 import ceramic.InputMap;
 import ceramic.Logger;
 import ceramic.System;
+import shellco.MathTools.moveTowards;
 
 /**
     This system controls the player character.
 **/
 final class PlayerControllerSystem extends System {
 
+    private static inline final PLAYER_SPEED: Float = 120.0;
+    private static inline final ACCELERATION: Float = 1600.0;
+    private static inline final DECELERATION: Float = 600.0;
+    
     /**
         Singleton instance of this system.
     **/
@@ -50,7 +55,13 @@ final class PlayerControllerSystem extends System {
             x -= 1.0;
         }
         
-        player.velocityX = x * 120;
+        final current = player.velocityX;
+        if (Math.abs(x) < 0.01) {
+            player.velocityX = moveTowards(current, 0.0, DECELERATION * delta);
+        } else {
+            player.velocityX = moveTowards(current, x * PLAYER_SPEED, ACCELERATION * delta);
+        }
+        
         if (x > 0) {
             player.scaleX = 1;
         } else if (x < 0) {
