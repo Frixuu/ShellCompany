@@ -4,38 +4,52 @@ package shellco.player;
 import assets.Images;
 import ceramic.App;
 import ceramic.Assets;
+import ceramic.Color;
+import ceramic.Quad;
 import ceramic.Sprite;
 import ceramic.SpriteSheet;
 
 /**
     The player character.
 **/
-final class Player extends Sprite {
+final class Player extends Quad {
 
+    /**
+        The sprite visual representing this player character.
+    **/
+    public final sprite: Sprite;
+    
     public function new(assets: Assets) {
         super();
         
-        PlayerControllerSystem.instance.activePlayer = this;
+        this.color = Color.YELLOW;
         
-        this.visible = true;
-        this.quad.roundTranslation = 1;
-        this.autoComputeSize = false;
+        this.size(15, 48);
         this.anchorKeepPosition(0.5, 1.0);
-        
         this.initArcadePhysics();
         this.body.collideWorldBounds = true;
         this.gravityY = 400;
+        PlayerControllerSystem.instance.activePlayer = this;
         
-        final sheet = this.sheet = new SpriteSheet();
-        sheet.texture = assets.texture(Images.DANCING_GIRL_SNAP);
-        sheet.texture.filter = NEAREST;
-        sheet.grid(39, 53);
-        sheet.addGridAnimation("dance", [0, 1, 2, 3, 4, 5, 6, 7], 0.12);
-        this.animation = "dance";
-        this.frameOffsetY = 2;
-        
-        this.size(39, 53);
-        this.anchorKeepPosition(0.5, 1.0);
+        this.add({
+            final sprite = this.sprite = new Sprite();
+            sprite.autoComputeSize = true;
+            
+            final sheet = sprite.sheet = new SpriteSheet();
+            final atlas = assets.texture(Images.DANCING_GIRL_SNAP);
+            atlas.filter = NEAREST;
+            sheet.texture = atlas;
+            sheet.grid(39, 53);
+            sheet.addGridAnimation("dance", [0, 1, 2, 3, 4, 5, 6, 7], 0.12);
+            
+            sprite.frameOffset(-1, 0);
+            sprite.anchor(0.5, 1.0);
+            sprite.pos(this.width / 2.0, this.height);
+            sprite.quad.roundTranslation = 1;
+            sprite.animation = "dance";
+            
+            sprite;
+        });
         
         final app = App.app;
         final persistentScene: PersistentScene = cast app.scenes.get("persistent");

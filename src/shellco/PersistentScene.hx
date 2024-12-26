@@ -5,7 +5,6 @@ import assets.Sprites;
 import ceramic.App;
 import ceramic.Camera;
 import ceramic.Scene;
-import clay.Clay;
 import shellco.ui.SoftwareCursor;
 
 /**
@@ -49,7 +48,7 @@ final class PersistentScene extends Scene {
             });
             
             #if clay_web
-            Clay.app.runtime.window.style.cursor = "none";
+            clay.Clay.app.runtime.window.style.cursor = "none";
             #elseif clay_sdl
             sdl.SDL.showCursor(0);
             #end
