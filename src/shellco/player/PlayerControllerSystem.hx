@@ -11,7 +11,7 @@ import shellco.MathTools.moveTowards;
 **/
 final class PlayerControllerSystem extends System {
 
-    private static inline final PLAYER_SPEED: Float = 120.0;
+    private static inline final PLAYER_SPEED: Float = 95.0;
     private static inline final ACCELERATION: Float = 1600.0;
     private static inline final DECELERATION: Float = 600.0;
     

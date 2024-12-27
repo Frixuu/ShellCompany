@@ -12,8 +12,9 @@ import ceramic.Visual;
 class BounceComponent extends Entity implements Component {
 
     @entity private var visual: Visual;
-    private final amplitude: Float;
-    private final timeScale: Float;
+    
+    public var amplitude: Float;
+    public var timeScale: Float;
     
     public function new(amplitude: Float, timeScale: Float) {
         super();
@@ -27,7 +28,7 @@ class BounceComponent extends Entity implements Component {
     
     private function playOnce() {
         visual.tween(LINEAR, this.timeScale, 0.0, 2 * Math.PI, (value, time) -> {
-            visual.y = Math.sin(value) * amplitude;
+            visual.translateY = Math.sin(value) * amplitude;
         }).onceComplete(this, () -> {
             Timer.delay(this, 0.0, this.playOnce);
         });

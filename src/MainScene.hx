@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 package;
 
-import assets.Images;
 import ceramic.App;
 import ceramic.Color;
 import ceramic.LdtkVisual;
@@ -12,6 +11,7 @@ import shellco.PersistentScene;
 import shellco.SceneBase;
 import shellco.player.Player;
 
+using ceramic.SpritePlugin;
 using ceramic.TilemapPlugin;
 
 /**
@@ -22,9 +22,9 @@ class MainScene extends SceneBase {
     private var fish: Quad;
     
     public override function preload() {
+        this.assets.addSprite("player");
         this.assets.addImage("levels/SunnyLand_by_Ansimuz-extended");
         this.assets.addTilemap("levels/platformer_sample");
-        this.assets.addImage(Images.DANCING_GIRL_SNAP);
         this.assets.addImage("white");
     }
     
