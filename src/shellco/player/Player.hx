@@ -23,7 +23,7 @@ final class Player extends Quad {
         super();
         
         this.transparent = true;
-        this.size(15, 45);
+        this.size(45, 15);
         this.anchorKeepPosition(0.5, 1.0);
         this.initArcadePhysics();
         this.body.collideWorldBounds = true;
@@ -34,7 +34,7 @@ final class Player extends Quad {
             final sprite = this.sprite = new Sprite();
             sprite.autoComputeSize = true;
             sprite.sheet = assets.sheet("player");
-            sprite.frameOffset(-1, 8);
+            sprite.frameOffset(1, 8);
             sprite.anchor(0.5, 1.0);
             sprite.pos(this.width / 2.0, this.height);
             sprite.quad.roundTranslation = 1;
@@ -42,7 +42,7 @@ final class Player extends Quad {
             
             final bounce = new BounceComponent(0.0, 0.1);
             sprite.component("bounce", bounce);
-            app.onUpdate(sprite, _ -> {
+            app.onPreUpdate(sprite, _ -> {
                 if (Math.abs(this.velocityX) + Math.abs(this.velocityY) > 20.0) {
                     sprite.animation = "swim";
                     bounce.amplitude = 1;
@@ -59,9 +59,10 @@ final class Player extends Quad {
         
         final persistentScene: PersistentScene = cast app.scenes.get("persistent");
         final camera = persistentScene.mainCamera;
-        app.onPostUpdate(this, _ -> {
+        app.onPostUpdate(this, delta -> {
             camera.followTarget = true;
             camera.target(this.x, this.y - 30.0);
+            camera.update(delta);
         });
     }
 }

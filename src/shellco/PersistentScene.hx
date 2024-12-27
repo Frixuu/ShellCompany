@@ -78,10 +78,6 @@ final class PersistentScene extends Scene {
             camera.trackSpeedX = 30.0;
             camera.trackSpeedY = 30.0;
             camera.trackCurve = 0.3;
-            camera.followTarget = true;
-            app.onUpdate(camera, delta -> {
-                camera.update(delta);
-            });
             camera;
         };
     }
