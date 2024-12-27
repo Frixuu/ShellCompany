@@ -9,7 +9,7 @@ import ceramic.Tween;
 import shellco.visual.BubbleParticleEmitter;
 
 using Lambda;
-using shellco.Extensions;
+using ceramic.Utils;
 
 /**
     Adds special effects when loading other Scenes.

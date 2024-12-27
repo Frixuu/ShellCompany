@@ -3,7 +3,6 @@ package shellco.player;
 
 import ceramic.App;
 import ceramic.Assets;
-import ceramic.Color;
 import ceramic.Quad;
 import ceramic.Sprite;
 import shellco.visual.BounceComponent;
@@ -47,7 +46,7 @@ final class Player extends Quad {
             app.onUpdate(sprite, _ -> {
                 if (Math.abs(this.velocityX) > 1.0) {
                     sprite.animation = "swim";
-                    bounce.amplitude = 0.7;
+                    bounce.amplitude = 1.2;
                     bounce.timeScale = 0.7;
                 } else {
                     sprite.animation = "idle";
@@ -63,7 +62,7 @@ final class Player extends Quad {
         final camera = persistentScene.mainCamera;
         app.onPostUpdate(this, _ -> {
             camera.followTarget = true;
-            camera.target(this.x, this.y);
+            camera.target(this.x, this.y - 30.0);
         });
     }
 }

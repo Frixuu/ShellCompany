@@ -1,11 +1,14 @@
 // SPDX-License-Identifier: MIT
 package shellco;
 
-import assets.Sprites;
 import ceramic.App;
 import ceramic.Camera;
 import ceramic.Scene;
+import shellco.ui.DialogueScene;
+import shellco.ui.InventoryScene;
 import shellco.ui.SoftwareCursor;
+
+using ceramic.SpritePlugin;
 
 /**
     Scene that is assumed to live for the entirety of the game.
@@ -19,7 +22,7 @@ final class PersistentScene extends Scene {
     
     public override function preload() {
         this.assets.addImage("fonts/minogram");
-        this.assets.add(Sprites.UI__CURSOR);
+        this.assets.addSprite("ui/cursor");
     }
     
     public override function create() {
@@ -30,6 +33,18 @@ final class PersistentScene extends Scene {
         final app = App.app;
         app.scenes.set("main", {
             final scene = new MainScene();
+            scene.assets.parent = this.assets;
+            scene;
+        });
+        
+        app.scenes.set("ui: dialogue", {
+            final scene = new DialogueScene();
+            scene.assets.parent = this.assets;
+            scene;
+        });
+        
+        app.scenes.set("ui: inventory", {
+            final scene = new InventoryScene();
             scene.assets.parent = this.assets;
             scene;
         });
@@ -55,14 +70,15 @@ final class PersistentScene extends Scene {
             
             cursor;
         });
+        
         this.mainCamera = {
             final camera = new Camera();
             camera.viewportWidth = Project.TARGET_WIDTH;
             camera.viewportHeight = Project.TARGET_HEIGHT;
-            camera.trackSpeedX = 80;
+            camera.trackSpeedX = 150;
             camera.trackCurve = 0.3;
             camera.followTarget = true;
-            app.onPostUpdate(camera, delta -> {
+            app.onUpdate(camera, delta -> {
                 camera.update(delta);
             });
             camera;
