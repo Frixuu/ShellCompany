@@ -28,24 +28,23 @@ final class PlayerControllerSystem extends System {
     private final logger: Logger = new Logger();
     private final inputMap: InputMap<PlayerAction> = {
         final map = new InputMap<PlayerAction>();
-        map.bindScanCode(Jump, SPACE);
         map.bindScanCode(MoveLeft, LEFT);
         map.bindScanCode(MoveLeft, KEY_A);
         map.bindScanCode(MoveRight, RIGHT);
         map.bindScanCode(MoveRight, KEY_D);
-        map.bindConvertedToAxis(MoveLeft, MoveHorizontal, -1.0);
-        map.bindConvertedToAxis(MoveRight, MoveHorizontal, 1.0);
+        map.bindScanCode(MoveUp, UP);
+        map.bindScanCode(MoveUp, KEY_W);
+        map.bindScanCode(MoveDown, DOWN);
+        map.bindScanCode(MoveDown, KEY_S);
         map;
     };
     
     public override function earlyUpdate(delta: Float) {
     
         final player = this.activePlayer ?? return;
-        final inputMap = this.inputMap;
+        player.gravityY = 0.0;
         
-        if (inputMap.justPressed(Jump) && player.body.isOnFloor()) {
-            player.velocityY = -180;
-        }
+        final inputMap = this.inputMap;
         
         var x: Float = 0.0;
         if (inputMap.pressed(MoveRight)) {
@@ -55,11 +54,26 @@ final class PlayerControllerSystem extends System {
             x -= 1.0;
         }
         
+        var y: Float = 0.0;
+        if (inputMap.pressed(MoveDown)) {
+            y += 1.0;
+        }
+        if (inputMap.pressed(MoveUp)) {
+            y -= 1.0;
+        }
+        
         final current = player.velocityX;
         if (Math.abs(x) < 0.01) {
             player.velocityX = moveTowards(current, 0.0, DECELERATION * delta);
         } else {
             player.velocityX = moveTowards(current, x * PLAYER_SPEED, ACCELERATION * delta);
+        }
+        
+        final current = player.velocityY;
+        if (Math.abs(y) < 0.01) {
+            player.velocityY = moveTowards(current, 4.0, DECELERATION * delta);
+        } else {
+            player.velocityY = moveTowards(current, y * PLAYER_SPEED, ACCELERATION * delta);
         }
         
         if (x > 0) {

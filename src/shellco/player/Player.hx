@@ -27,7 +27,6 @@ final class Player extends Quad {
         this.anchorKeepPosition(0.5, 1.0);
         this.initArcadePhysics();
         this.body.collideWorldBounds = true;
-        this.gravityY = 400;
         PlayerControllerSystem.instance.activePlayer = this;
         
         final app = App.app;
@@ -44,9 +43,9 @@ final class Player extends Quad {
             final bounce = new BounceComponent(0.0, 0.1);
             sprite.component("bounce", bounce);
             app.onUpdate(sprite, _ -> {
-                if (Math.abs(this.velocityX) > 1.0) {
+                if (Math.abs(this.velocityX) + Math.abs(this.velocityY) > 20.0) {
                     sprite.animation = "swim";
-                    bounce.amplitude = 1.2;
+                    bounce.amplitude = 1;
                     bounce.timeScale = 0.7;
                 } else {
                     sprite.animation = "idle";

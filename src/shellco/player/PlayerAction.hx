@@ -4,6 +4,6 @@ package shellco.player;
 enum abstract PlayerAction(Int) {
     public var MoveLeft;
     public var MoveRight;
-    public var MoveHorizontal;
-    public var Jump;
+    public var MoveUp;
+    public var MoveDown;
 }

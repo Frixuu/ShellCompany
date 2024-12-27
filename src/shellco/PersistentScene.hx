@@ -75,7 +75,8 @@ final class PersistentScene extends Scene {
             final camera = new Camera();
             camera.viewportWidth = Project.TARGET_WIDTH;
             camera.viewportHeight = Project.TARGET_HEIGHT;
-            camera.trackSpeedX = 150;
+            camera.trackSpeedX = 30.0;
+            camera.trackSpeedY = 30.0;
             camera.trackCurve = 0.3;
             camera.followTarget = true;
             app.onUpdate(camera, delta -> {
