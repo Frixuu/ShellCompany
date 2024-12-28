@@ -22,6 +22,7 @@ final class InventoryScene extends SceneBase {
     private var panel: Quad;
     private var panelShown: Bool = false;
     private var itemVisuals: Array<ItemVisual> = [];
+    private var timeSinceLastItemAdded: Float = 999.9;
     
     public override function preload() {
         this.assets.addShader("shaders/single_color");
@@ -76,6 +77,7 @@ final class InventoryScene extends SceneBase {
             this.itemVisuals.push(new ItemVisual(item));
             Assert.assert(this.itemVisuals.length == n);
             this.recalculateItemVisuals();
+            this.timeSinceLastItemAdded = 0.0;
         });
         inventory.onItemRemoved(this, (item, n) -> {
             final newVisuals = [];
@@ -92,13 +94,15 @@ final class InventoryScene extends SceneBase {
         });
         
         Timer.delay(this, 0.3, () -> inventory.addItem(new Item()));
-        Timer.delay(this, 0.4, () -> inventory.addItem(new Item()));
+        Timer.delay(this, 5.4, () -> inventory.addItem(new Item()));
     }
     
     public override function update(delta: Float) {
         super.update(delta);
-        this.panel.y = MathTools.moveTowards(this.panel.y, (this.panelShown ? 0.0 : -36.0),
-            200.0 * delta);
+        this.timeSinceLastItemAdded += delta;
+        
+        final show = this.panelShown || (this.timeSinceLastItemAdded < 2.0);
+        this.panel.y = MathTools.moveTowards(this.panel.y, (show ? 0.0 : -36.0), 200.0 * delta);
     }
     
     private function recalculateItemVisuals() {
