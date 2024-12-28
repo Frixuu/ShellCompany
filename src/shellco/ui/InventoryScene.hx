@@ -3,6 +3,7 @@ package shellco.ui;
 
 import ceramic.AlphaColor;
 import ceramic.App;
+import ceramic.Assert;
 import ceramic.Color;
 import ceramic.Quad;
 import ceramic.Timer;
@@ -10,6 +11,7 @@ import shellco.inventory.InventorySystem;
 import shellco.inventory.Item;
 import shellco.inventory.ItemVisual;
 
+using Lambda;
 using ceramic.SpritePlugin;
 
 /**
@@ -70,16 +72,27 @@ final class InventoryScene extends SceneBase {
         });
         
         final inventory = InventorySystem.instance;
-        inventory.onItemAdded(this, (item, _) -> {
+        inventory.onItemAdded(this, (item, n) -> {
             this.itemVisuals.push(new ItemVisual(item));
+            Assert.assert(this.itemVisuals.length == n);
             this.recalculateItemVisuals();
         });
-        inventory.onItemRemoved(this, (item, _) -> {
-            this.itemVisuals = this.itemVisuals.filter(v -> v.item != item);
+        inventory.onItemRemoved(this, (item, n) -> {
+            final newVisuals = [];
+            for (v in this.itemVisuals) {
+                if (v.item == item) {
+                    v.destroy();
+                } else {
+                    newVisuals.push(v);
+                }
+            }
+            this.itemVisuals = newVisuals;
+            Assert.assert(this.itemVisuals.length == n);
             this.recalculateItemVisuals();
         });
         
-        Timer.delay(this, 1.0, () -> inventory.addItem(new Item()));
+        Timer.delay(this, 0.3, () -> inventory.addItem(new Item()));
+        Timer.delay(this, 0.4, () -> inventory.addItem(new Item()));
     }
     
     public override function update(delta: Float) {

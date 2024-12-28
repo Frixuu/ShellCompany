@@ -6,6 +6,6 @@ class Item {
     public function new() {}
     
     public function tryCombine(other: Item): Null<Item> {
-        return null;
+        return new Item();
     }
 }
