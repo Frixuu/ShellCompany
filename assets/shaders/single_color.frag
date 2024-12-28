@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 #ifdef GL_ES
 precision mediump float;
 #else

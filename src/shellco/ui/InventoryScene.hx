@@ -13,10 +13,11 @@ using ceramic.SpritePlugin;
 **/
 final class InventoryScene extends SceneBase {
 
+    private var panel: Quad;
+    private var panelShown: Bool = false;
+    
     public override function preload() {
-        super.preload();
         this.assets.addShader("shaders/single_color");
-        this.assets.addImage("ui/long_hamburger");
     }
     
     public override function create() {
@@ -28,7 +29,7 @@ final class InventoryScene extends SceneBase {
     public override function ready() {
         final app = App.app;
         this.add({
-            final panel = new Quad();
+            final panel = this.panel = new Quad();
             panel.shader = {
                 final asset = this.assets.shader("shaders/single_color");
                 final shader = asset.clone();
@@ -39,15 +40,36 @@ final class InventoryScene extends SceneBase {
             panel.anchor(0.0, 0.0);
             panel.pos(0.0, 0.0);
             panel.size(Project.TARGET_WIDTH, 36);
-            panel.translateY = -36.0;
-            app.onUpdate(panel, delta -> {
-                var targetY = -36.0;
-                if (app.screen.pointerY < 40.0) {
-                    targetY = 0.0;
-                }
-                panel.translateY = MathTools.moveTowards(panel.translateY, targetY, 200.0 * delta);
+            panel.onPointerOver(this, _ -> {
+                this.panelShown = true;
+            });
+            panel.onPointerOut(this, _ -> {
+                this.panelShown = false;
             });
             panel;
         });
+        this.add({
+            final trigger = new Quad();
+            trigger.anchor(0.0, 0.0);
+            trigger.pos(0.0, 0.0);
+            trigger.size(Project.TARGET_WIDTH, 36);
+            trigger.depth = 10;
+            trigger.transparent = true;
+            trigger.onPointerOver(this, _ -> {
+                this.log.info("pointer over an inventory panel");
+                this.panelShown = true;
+            });
+            trigger.onPointerOut(this, _ -> {
+                this.log.info("pointer no longer over an inventory panel");
+                this.panelShown = false;
+            });
+            trigger;
+        });
+    }
+    
+    public override function update(delta: Float) {
+        super.update(delta);
+        this.panel.translateY = MathTools.moveTowards(this.panel.translateY,
+            (this.panelShown ? 0.0 : -36.0), 200.0 * delta);
     }
 }
