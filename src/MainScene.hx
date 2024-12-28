@@ -24,8 +24,8 @@ class MainScene extends SceneBase {
     
     public override function preload() {
         this.assets.addSprite("player");
-        this.assets.addImage("levels/SunnyLand_by_Ansimuz-extended");
-        this.assets.addTilemap("levels/platformer_sample");
+        this.assets.addImage("levels/sheet_full");
+        this.assets.addTilemap("levels/game_jam");
         this.assets.addImage("white");
         this.assets.addShader("outline");
     }
@@ -49,7 +49,7 @@ class MainScene extends SceneBase {
         text.pos(20, 20);
         this.add(text);
         
-        final tileset = this.assets.imageAsset("levels/SunnyLand_by_Ansimuz-extended");
+        final tileset = this.assets.imageAsset("levels/sheet_full");
         tileset.texture.filter = NEAREST;
         
         final arcade = App.app.arcade;
@@ -58,8 +58,8 @@ class MainScene extends SceneBase {
         final persistentScene: PersistentScene = cast App.app.scenes.get("persistent");
         final camera = persistentScene.mainCamera;
         
-        final ldtkData = this.assets.ldtk("levels/platformer_sample");
-        final level = ldtkData.worlds[0].levels[0];
+        final ldtkData = this.assets.ldtk("levels/game_jam");
+        final level = ldtkData.worlds[0].level("casino_outside");
         level.ensureLoaded(() -> {
         
             final tilemap = new Tilemap();
@@ -69,7 +69,7 @@ class MainScene extends SceneBase {
             
             arcade.world.setBounds(0, 0, tilemap.width, tilemap.height);
             tilemap.initArcadePhysics();
-            tilemap.collidableLayers = ["collisions"];
+            tilemap.collidableLayers = ["foreground"];
             
             camera.contentX = level.worldX;
             camera.contentY = level.worldY;
