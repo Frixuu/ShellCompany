@@ -5,6 +5,7 @@ import ceramic.InputMap;
 import ceramic.Logger;
 import ceramic.System;
 import shellco.MathTools.moveTowards;
+import shellco.narrative.NarrativeSystem;
 
 /**
     This system controls the player character.
@@ -14,6 +15,8 @@ final class PlayerControllerSystem extends System {
     private static inline final PLAYER_SPEED: Float = 95.0;
     private static inline final ACCELERATION: Float = 1600.0;
     private static inline final DECELERATION: Float = 600.0;
+    
+    private var enabled: Bool = true;
     
     /**
         Singleton instance of this system.
@@ -39,6 +42,14 @@ final class PlayerControllerSystem extends System {
         map;
     };
     
+    public function new() {
+        super();
+        final narrative = NarrativeSystem.instance;
+        narrative.onConvoAdvanced(this, line -> {
+            this.enabled = line == null;
+        });
+    }
+    
     public override function earlyUpdate(delta: Float) {
     
         final player = this.activePlayer ?? return;
@@ -47,19 +58,23 @@ final class PlayerControllerSystem extends System {
         final inputMap = this.inputMap;
         
         var x: Float = 0.0;
-        if (inputMap.pressed(MoveRight)) {
-            x += 1.0;
-        }
-        if (inputMap.pressed(MoveLeft)) {
-            x -= 1.0;
+        if (this.enabled) {
+            if (inputMap.pressed(MoveRight)) {
+                x += 1.0;
+            }
+            if (inputMap.pressed(MoveLeft)) {
+                x -= 1.0;
+            }
         }
         
         var y: Float = 0.0;
-        if (inputMap.pressed(MoveDown)) {
-            y += 1.0;
-        }
-        if (inputMap.pressed(MoveUp)) {
-            y -= 1.0;
+        if (this.enabled) {
+            if (inputMap.pressed(MoveDown)) {
+                y += 1.0;
+            }
+            if (inputMap.pressed(MoveUp)) {
+                y -= 1.0;
+            }
         }
         
         final current = player.velocityX;
@@ -71,7 +86,7 @@ final class PlayerControllerSystem extends System {
         
         final current = player.velocityY;
         if (Math.abs(y) < 0.01) {
-            player.velocityY = moveTowards(current, 4.0, DECELERATION * delta);
+            player.velocityY = moveTowards(current, this.enabled ? 4.0 : 0.0, DECELERATION * delta);
         } else {
             player.velocityY = moveTowards(current, y * PLAYER_SPEED, ACCELERATION * delta);
         }

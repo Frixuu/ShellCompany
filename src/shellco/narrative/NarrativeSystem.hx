@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 package shellco.narrative;
 
+import ceramic.Color;
 import ceramic.System;
 import haxe.ds.List;
 
@@ -15,8 +16,13 @@ final class NarrativeSystem extends System {
     
     @event public function convoAdvanced(line: Null<DialogueLine>);
     
-    public function say(name: String, message: String, mode: SayMode = Queue) {
-        final line: DialogueLine = {characterName: name, text: message};
+    public function say(
+        name: String,
+        message: String,
+        nameColor: Color = Color.WHITE,
+        mode: SayMode = Queue
+    ) {
+        final line: DialogueLine = {characterName: name, text: message, nameColor: nameColor};
         final queue = this.lineQueue;
         switch (mode) {
             case Queue:

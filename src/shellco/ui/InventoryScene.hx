@@ -56,11 +56,9 @@ final class InventoryScene extends SceneBase {
             trigger.depth = 10;
             trigger.transparent = true;
             trigger.onPointerOver(this, _ -> {
-                this.log.info("pointer over an inventory panel");
                 this.panelShown = true;
             });
             trigger.onPointerOut(this, _ -> {
-                this.log.info("pointer no longer over an inventory panel");
                 this.panelShown = false;
             });
             trigger;
