@@ -3,6 +3,9 @@ package shellco.inventory;
 
 import ceramic.ReadOnlyArray;
 import ceramic.System;
+import haxe.ds.ObjectMap;
+
+using Lambda;
 
 final class InventorySystem extends System {
 
@@ -11,7 +14,7 @@ final class InventorySystem extends System {
     **/
     @lazy public static var instance: InventorySystem = new InventorySystem();
     
-    private final _items: Array<Item> = [];
+    private final _items: ObjectMap<Item, Bool> = new ObjectMap();
     
     /**
         Items in this inventory.
@@ -19,10 +22,23 @@ final class InventorySystem extends System {
     public var items(get, never): ReadOnlyArray<Item>;
     
     private inline function get_items(): ReadOnlyArray<Item> {
-        return this._items;
+        return [for (key in this._items.keys()) key];
     }
     
     @event public function itemAdded(item: Item, newCount: Int);
     
     @event public function itemRemoved(item: Item, newCount: Int);
+    
+    public function addItem(item: Item) {
+        if (!this._items.exists(item)) {
+            this._items.set(item, true);
+            this.emitItemAdded(item, this._items.count());
+        }
+    }
+    
+    public function removeItem(item: Item) {
+        if (this._items.remove(item)) {
+            this.emitItemRemoved(item, this._items.count());
+        }
+    }
 }

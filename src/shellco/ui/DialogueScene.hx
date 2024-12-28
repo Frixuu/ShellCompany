@@ -143,13 +143,15 @@ final class DialogueScene extends SceneBase {
             }
         });
         
-        narrative.say("Foo",
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
-            "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
-            "when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
-        narrative.say("Maury host", "You are *not* the father.");
-        narrative.say("Luke", "Yeeeees!", Color.GREEN);
-        Timer.delay(this, 1.0, () -> narrative.advanceConvo());
+        /*
+            narrative.say("Foo",
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
+                "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
+                "when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
+            narrative.say("Maury host", "You are *not* the father.");
+            narrative.say("Luke", "Yeeeees!", Color.GREEN);
+            Timer.delay(this, 1.0, () -> narrative.advanceConvo());
+         */
     }
     
     public override function update(delta: Float) {

@@ -37,7 +37,7 @@
 	"backupLimit": 10,
 	"backupRelPath": null,
 	"levelNamePattern": "%world_Level_%idx",
-	"tutorialDesc": "This sample demonstrates a typical 2D platformer with auto-rendered walls and various gameplay entities.\nPress [Shift+A] to toggle \"Single layer mode\", which helps understanding which layer contains what.\nPress [SHIFT+R] to toggle auto-rendered layers.",
+	"tutorialDesc": null,
 	"customCommands": [],
 	"flags": [ "ExportOldTableOfContentData", "UseMultilinesType" ],
 	"defs": { "layers": [
@@ -1606,8 +1606,8 @@
 			"exportToToc": false,
 			"allowOutOfBounds": false,
 			"doc": null,
-			"width": 24,
-			"height": 24,
+			"width": 45,
+			"height": 15,
 			"resizableX": false,
 			"resizableY": false,
 			"minWidth": null,
@@ -2047,25 +2047,19 @@
 					"entityInstances": [
 						{
 							"__identifier": "player",
-							"__grid": [8,11],
+							"__grid": [10,10],
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 104, "x": 0, "y": 240, "w": 16, "h": 16 },
 							"__smartColor": "#63C74D",
 							"iid": "a315d323-66b0-11ec-9cd7-8ddce09157bc",
-							"width": 24,
-							"height": 24,
+							"width": 45,
+							"height": 15,
 							"defUid": 46,
-							"px": [136,192],
-							"fieldInstances": [{ "__identifier": "items", "__type": "Array<LocalEnum.item>", "__value": [ "knife", "boots" ], "__tile": null, "defUid": 51, "realEditorValues": [ {
-								"id": "V_String",
-								"params": ["knife"]
-							}, {
-								"id": "V_String",
-								"params": ["boots"]
-							} ] }],
-							"__worldX": 136,
-							"__worldY": 192
+							"px": [168,176],
+							"fieldInstances": [{ "__identifier": "items", "__type": "Array<LocalEnum.item>", "__value": [], "__tile": null, "defUid": 51, "realEditorValues": [] }],
+							"__worldX": 168,
+							"__worldY": 176
 						},
 						{
 							"__identifier": "chest",
