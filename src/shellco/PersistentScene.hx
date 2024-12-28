@@ -48,6 +48,9 @@ final class PersistentScene extends Scene {
             scene.assets.parent = this.assets;
             scene;
         });
+        
+        final interactiveGroup = app.group("droppable_on");
+        interactiveGroup.sortDirection = NONE;
     }
     
     public override function ready() {

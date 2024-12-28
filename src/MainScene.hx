@@ -7,6 +7,7 @@ import ceramic.LdtkVisual;
 import ceramic.Quad;
 import ceramic.Text;
 import ceramic.Tilemap;
+import shellco.InteractableVisual;
 import shellco.PersistentScene;
 import shellco.SceneBase;
 import shellco.player.Player;
@@ -26,6 +27,7 @@ class MainScene extends SceneBase {
         this.assets.addImage("levels/SunnyLand_by_Ansimuz-extended");
         this.assets.addTilemap("levels/platformer_sample");
         this.assets.addImage("white");
+        this.assets.addShader("outline");
     }
     
     public override function create() {
@@ -90,6 +92,12 @@ class MainScene extends SceneBase {
                         arcade.world.collide(player, tilemap);
                     });
                     player;
+                } else if (entityDef.identifier == "mob") {
+                    final visual = new InteractableVisual(this.assets);
+                    visual.anchor(0, 0);
+                    visual.size(16, 16);
+                    visual.pos(ldtkEntity.pxX, ldtkEntity.pxY);
+                    visual;
                 } else if (entityDef.isRenderable(Tile)) {
                     new LdtkVisual(ldtkEntity);
                 } else {
