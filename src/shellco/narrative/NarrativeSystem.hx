@@ -29,9 +29,15 @@ final class NarrativeSystem extends System {
         message: String,
         nameColor: Color = Color.WHITE,
         mode: SayMode = Queue,
-        startIfNothingToSay: Bool = true
+        startIfNothingToSay: Bool = false,
+        callback: Null<() -> Void> = null
     ) {
-        final line: DialogueLine = {characterName: name, text: message, nameColor: nameColor};
+        final line: DialogueLine = {
+            characterName: name,
+            text: message,
+            nameColor: nameColor,
+            callback: callback
+        };
         final queue = this.lineQueue;
         switch (mode) {
             case Queue:
@@ -49,7 +55,11 @@ final class NarrativeSystem extends System {
     }
     
     public function advanceConvo() {
-        this.emitConvoAdvanced(this.lineQueue.pop());
+        final line = this.lineQueue.pop();
+        if (line != null && line.callback != null) {
+            line.callback();
+        }
+        this.emitConvoAdvanced(line);
     }
 }
 

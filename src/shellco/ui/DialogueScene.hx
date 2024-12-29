@@ -143,13 +143,30 @@ final class DialogueScene extends SceneBase {
             }
         });
         
-        narrative.say("Foo",
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
-            "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
-            "when an unknown printer took a galley of type and scrambled it to make a type specimen book.");
-        narrative.say("Maury host", "You are *not* the father.");
-        narrative.say("Luke", "Yeeeees!", Color.GREEN);
-        Timer.delay(this, 5.0, () -> narrative.advanceConvo());
+        narrative.say("Ghost", "Hey, E.");
+        narrative.say("E.", "Yes, agent Ghost?");
+        narrative.say("Ghost", "Would you mind briefing me again?");
+        narrative.say("Ghost",
+            "I *totally* remember every detail you've said, but I want to be extra sure.");
+        narrative.say("E.", "...");
+        narrative.say("E.", "Right.");
+        narrative.say("E.", "Your task is to infiltrate the Fish & Chips casino.");
+        narrative.say("E.",
+            "There were rumors about potential Animals activity. " +
+            "We suspect they have a hideout nearby.");
+        narrative.say("Ghost", "And I must know what's going on. See? I remember everything.");
+        narrative.say("Ghost", "I'm a ghostfish, not a goldfish.");
+        narrative.say("E.", "*ughhh*", () -> {
+            Timer.delay(this, 10.0, () -> {
+                narrative.say("E.", "It seems we're in luck. Baby Shark works the door today.",
+                    true);
+                narrative.say("Ghost", "...Like, a literal baby? A security guard?");
+                narrative.say("E.", "No. He has bowel problems and wears a diaper at all times.");
+                narrative.say("Ghost", "Ah. Should've guessed.");
+            });
+        });
+        
+        Timer.delay(this, 1.0, () -> narrative.advanceConvo());
     }
     
     public override function update(delta: Float) {
