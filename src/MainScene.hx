@@ -9,6 +9,7 @@ import ceramic.Tilemap;
 import ceramic.Timer;
 import shellco.DroppedItem;
 import shellco.InteractableVisual;
+import shellco.Lock;
 import shellco.MathTools;
 import shellco.PersistentScene;
 import shellco.SceneBase;
@@ -105,9 +106,33 @@ class MainScene extends SceneBase {
                     visual.pos(ldtkEntity.pxX, ldtkEntity.pxY);
                     visual.afterPickup = () -> {
                         final narrative = NarrativeSystem.instance;
-                        narrative.say("Ghost", "You know what they say.", Restart, true);
+                        narrative.say("Ghost", "You know what they say.", true);
                         narrative.say("Ghost", "Communication is the *key* to success.");
                         narrative.say("E.", "I should ask for a raise.");
+                    };
+                    visual;
+                } else if (entityDef.identifier == "lock") {
+                    final visual = new Lock(this.assets);
+                    visual.anchor(entityDef.pivotX, entityDef.pivotY);
+                    visual.size(entityDef.width, entityDef.height);
+                    visual.pos(ldtkEntity.pxX, ldtkEntity.pxY);
+                    visual.afterUse = () -> {
+                    
+                        final foreground = tilemap.layer("foreground").layerData;
+                        for (x in 16...18) {
+                            for (y in 24...28) {
+                                final index = foreground.indexFromColumnAndRow(x, y);
+                                foreground.tiles.original[index] = 0;
+                            }
+                        }
+                        
+                        tilemap.computeContent();
+                        
+                        final narrative = NarrativeSystem.instance;
+                        narrative.say("Ghost", "Aaaand, opeeen!", true);
+                        narrative.say("Ghost", "Like shooting fish in a barrel.");
+                        narrative.say("E.", "...");
+                        narrative.say("Ghost", "I can literally hear you giving me the fish eye.");
                     };
                     visual;
                 } else if (entityDef.isRenderable(Tile)) {
@@ -117,25 +142,25 @@ class MainScene extends SceneBase {
                 };
             });
         });
-        
-        final narrative = NarrativeSystem.instance;
-        narrative.say("Ghost", "Hey, E.");
-        narrative.say("E.", "Yes, agent Ghost?");
-        narrative.say("Ghost", "Would you mind briefing me again?");
-        narrative.say("Ghost",
-            "I *totally* remember every thing you've said, but I want to be extra sure.");
-        narrative.say("E.", "...");
-        narrative.say("E.", "Right.");
-        narrative.say("E.", "Your task is to infiltrate the Fish & Chips casino.");
-        narrative.say("E.",
-            "There were rumors about potential Animals activity. " +
-            "We suspect they have a hideout nearby.");
-        narrative.say("Ghost",
-            "And you pay me to find out what's going on. See? I remember everything.");
-        narrative.say("Ghost", "I'm a ghostfish, not a goldfish.");
-        narrative.say("E.", "*ughhh*");
-        
-        // Timer.delay(this, 3.0, () -> narrative.advanceConvo());
+        /*
+            final narrative = NarrativeSystem.instance;
+            narrative.say("Ghost", "Hey, E.");
+            narrative.say("E.", "Yes, agent Ghost?");
+            narrative.say("Ghost", "Would you mind briefing me again?");
+            narrative.say("Ghost",
+                "I *totally* remember every thing you've said, but I want to be extra sure.");
+            narrative.say("E.", "...");
+            narrative.say("E.", "Right.");
+            narrative.say("E.", "Your task is to infiltrate the Fish & Chips casino.");
+            narrative.say("E.",
+                "There were rumors about potential Animals activity. " +
+                "We suspect they have a hideout nearby.");
+            narrative.say("Ghost",
+                "And you pay me to find out what's going on. See? I remember everything.");
+            narrative.say("Ghost", "I'm a ghostfish, not a goldfish.");
+            narrative.say("E.", "*ughhh*");
+            Timer.delay(this, 3.0, () -> narrative.advanceConvo());
+         */
     }
     
     public override function ready() {

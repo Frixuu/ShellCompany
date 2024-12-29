@@ -24,7 +24,7 @@ class InteractableVisual extends Quad {
             final player = PlayerControllerSystem.instance.activePlayer ?? return;
             final dx = Math.abs(this.body.centerX - player.body.centerX);
             final dy = Math.abs(this.body.centerY - player.body.centerY);
-            if (Math.sqrt(dx * dx + dy * dy) <= 43.0) {
+            if (Math.sqrt(dx * dx + dy * dy) <= 48.0) {
                 this.tryInteractDirectly();
             }
         });
