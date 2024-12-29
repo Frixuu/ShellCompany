@@ -16,7 +16,7 @@ using ceramic.Utils;
 **/
 final class LoadingOverlayScene extends Scene {
 
-    private static inline final MIN_TIME_ON_SCREEN: Float = 0.01; // was 0.6
+    private static inline final MIN_TIME_ON_SCREEN: Float = 0.6;
     
     private final logger: Logger = new Logger();
     private var particles: Particles<BubbleParticleEmitter> = null;

@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 package shellco.inventory;
 
-class Item {
+abstract class Item {
 
-    public function new() {}
+    public abstract function spriteName(): String;
     
     public function tryCombine(other: Item): Null<Item> {
-        return new Item();
+        return null;
     }
 }

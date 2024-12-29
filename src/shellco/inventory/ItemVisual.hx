@@ -3,14 +3,18 @@ package shellco.inventory;
 
 import arcade.Body;
 import ceramic.App;
+import ceramic.Assets;
 import ceramic.Color;
 import ceramic.Group;
 import ceramic.Quad;
+import ceramic.Sprite;
 import ceramic.TouchInfo;
 import ceramic.Tween;
 import ceramic.Visual;
 import ceramic.VisualArcadePhysics;
 import shellco.ui.SoftwareCursor;
+
+using ceramic.SpritePlugin;
 
 final class ItemVisual extends Quad {
 
@@ -24,11 +28,13 @@ final class ItemVisual extends Quad {
     private var startPointerY: Float = 0;
     private var target: Null<Visual> = null;
     
-    public function new(item: Item) {
+    public final sprite: Sprite;
+    
+    public function new(item: Item, assets: Assets) {
         super();
         this.item = item;
         this.roundTranslation = 1;
-        this.color = Color.YELLOW;
+        this.transparent = true;
         this.anchor(0.0, 0.0);
         this.size(24, 24);
         this.depth = 1;
@@ -36,6 +42,17 @@ final class ItemVisual extends Quad {
         this.onPointerOut(this, _ -> SoftwareCursor.instance.animation = "crosshair (static)");
         this.onPointerDown(this, this.onClick);
         this.initArcadePhysics();
+        
+        this.add({
+            final sprite = this.sprite = new Sprite();
+            sprite.autoComputeSize = false;
+            sprite.sheet = assets.sheet("item");
+            sprite.anchor(0.0, 0.0);
+            sprite.pos(0, 0);
+            sprite.size(24, 24);
+            sprite.quad.roundTranslation = 1;
+            sprite;
+        });
         
         App.app.group("droppable_on").add(this);
     }
@@ -109,7 +126,7 @@ final class ItemVisual extends Quad {
             if (target is ItemVisual) {
                 final target: ItemVisual = cast target;
                 app.logger.info('trying to combine items ${this.item} and ${target.item}');
-                final resultItem = this.item.tryCombine(target.item);
+                final resultItem = this.item.tryCombine(target.item) ?? target.item.tryCombine(this.item);
                 if (resultItem != null) {
                     final inventory = InventorySystem.instance;
                     inventory.removeItem(this.item);

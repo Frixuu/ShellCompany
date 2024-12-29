@@ -4,8 +4,6 @@ package shellco;
 import ceramic.App;
 import ceramic.Camera;
 import ceramic.Scene;
-import shellco.ui.DialogueScene;
-import shellco.ui.InventoryScene;
 import shellco.ui.SoftwareCursor;
 
 using ceramic.SpritePlugin;
@@ -32,19 +30,7 @@ final class PersistentScene extends Scene {
         
         final app = App.app;
         app.scenes.set("main", {
-            final scene = new MainScene();
-            scene.assets.parent = this.assets;
-            scene;
-        });
-        
-        app.scenes.set("ui: dialogue", {
-            final scene = new DialogueScene();
-            scene.assets.parent = this.assets;
-            scene;
-        });
-        
-        app.scenes.set("ui: inventory", {
-            final scene = new InventoryScene();
+            final scene = new MainMenuScene();
             scene.assets.parent = this.assets;
             scene;
         });

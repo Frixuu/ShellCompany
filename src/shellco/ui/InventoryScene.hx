@@ -7,9 +7,10 @@ import ceramic.Assert;
 import ceramic.Color;
 import ceramic.Quad;
 import ceramic.Timer;
+import shellco.inventory.Cocktail;
 import shellco.inventory.InventorySystem;
-import shellco.inventory.Item;
 import shellco.inventory.ItemVisual;
+import shellco.inventory.Laxatives;
 
 using Lambda;
 using ceramic.SpritePlugin;
@@ -26,6 +27,7 @@ final class InventoryScene extends SceneBase {
     
     public override function preload() {
         this.assets.addShader("shaders/single_color");
+        this.assets.addSprite("item");
     }
     
     public override function create() {
@@ -59,7 +61,7 @@ final class InventoryScene extends SceneBase {
         this.add({
             final trigger = new Quad();
             trigger.anchor(0.0, 0.0);
-            trigger.pos(0.0, 0.0);
+            trigger.pos(0.0, -36.0);
             trigger.size(Project.TARGET_WIDTH, 36);
             trigger.depth = 10;
             trigger.transparent = true;
@@ -74,7 +76,7 @@ final class InventoryScene extends SceneBase {
         
         final inventory = InventorySystem.instance;
         inventory.onItemAdded(this, (item, n) -> {
-            this.itemVisuals.push(new ItemVisual(item));
+            this.itemVisuals.push(new ItemVisual(item, this.assets));
             Assert.assert(this.itemVisuals.length == n);
             this.recalculateItemVisuals();
             this.timeSinceLastItemAdded = 0.0;
@@ -93,8 +95,8 @@ final class InventoryScene extends SceneBase {
             this.recalculateItemVisuals();
         });
         
-        Timer.delay(this, 5.3, () -> inventory.addItem(new Item()));
-        Timer.delay(this, 5.4, () -> inventory.addItem(new Item()));
+        Timer.delay(this, 0.3, () -> inventory.addItem(new Cocktail()));
+        Timer.delay(this, 0.8, () -> inventory.addItem(new Laxatives()));
     }
     
     public override function update(delta: Float) {
@@ -113,6 +115,7 @@ final class InventoryScene extends SceneBase {
             visual.anchor(0.0, 0.0);
             visual.depth = 1;
             visual.pos((32 * i) + 8, 8);
+            visual.sprite.animation = visual.item.spriteName();
         }
     }
 }
