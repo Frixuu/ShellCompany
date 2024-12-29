@@ -8,6 +8,8 @@ import ceramic.Quad;
 import ceramic.Tilemap;
 import ceramic.Timer;
 import shellco.DroppedItem;
+import shellco.EndLevel;
+import shellco.EndScene;
 import shellco.InteractableVisual;
 import shellco.Lock;
 import shellco.MathTools;
@@ -27,8 +29,6 @@ using ceramic.TilemapPlugin;
 **/
 class MainScene extends SceneBase {
 
-    private var fish: Quad;
-    
     public override function preload() {
         this.assets.addSprite("player");
         this.assets.addSprite("item");
@@ -168,6 +168,16 @@ class MainScene extends SceneBase {
                         narrative.say("Ghost", "Like shooting fish in a barrel.");
                         narrative.say("E.", "...");
                         narrative.say("Ghost", "I can literally hear you giving me the fish eye.");
+                    };
+                    visual;
+                } else if (entityDef.identifier == "end") {
+                    final visual = new EndLevel(this.assets);
+                    visual.entryEnabled = true;
+                    visual.anchor(entityDef.pivotX, entityDef.pivotY);
+                    visual.size(entityDef.width, entityDef.height);
+                    visual.pos(ldtkEntity.pxX, ldtkEntity.pxY);
+                    visual.onGo = () -> {
+                        App.app.scenes.set("main", new EndScene());
                     };
                     visual;
                 } else if (entityDef.isRenderable(Tile)) {

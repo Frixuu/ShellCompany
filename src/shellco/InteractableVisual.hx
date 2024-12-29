@@ -7,6 +7,7 @@ import ceramic.Color;
 import ceramic.Quad;
 import shellco.inventory.Item;
 import shellco.player.PlayerControllerSystem;
+import shellco.ui.SoftwareCursor;
 
 class InteractableVisual extends Quad {
 
@@ -20,6 +21,8 @@ class InteractableVisual extends Quad {
         App.app.group("droppable_on").add(this);
         this.initArcadePhysics();
         
+        this.onPointerOver(this, _ -> SoftwareCursor.instance.animation = "crosshair (dynamic)");
+        this.onPointerOut(this, _ -> SoftwareCursor.instance.animation = "crosshair (static)");
         this.onPointerDown(this, _ -> {
             final player = PlayerControllerSystem.instance.activePlayer ?? return;
             final dx = Math.abs(this.body.centerX - player.body.centerX);
