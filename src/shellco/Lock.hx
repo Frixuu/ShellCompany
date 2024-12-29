@@ -11,6 +11,7 @@ import shellco.inventory.InventorySystem;
 import shellco.inventory.Item;
 import shellco.inventory.Key;
 import shellco.narrative.NarrativeSystem;
+import shellco.player.PlayerControllerSystem;
 
 using ceramic.SpritePlugin;
 
@@ -84,6 +85,14 @@ class Lock extends InteractableVisual {
     public dynamic function afterUse() {}
     
     public override function tryUseItem(item: Item): Bool {
+    
+        final player = PlayerControllerSystem.instance.activePlayer ?? return false;
+        final dx = Math.abs(this.body.centerX - player.body.centerX);
+        final dy = Math.abs(this.body.centerY - player.body.centerY);
+        if (Math.sqrt(dx * dx + dy * dy) > this.interactionRange) {
+            return false;
+        }
+        
         if (item is Key) {
             Timer.delay(this, 0.0001, () -> {
                 this.afterUse();

@@ -11,6 +11,7 @@ import shellco.ui.SoftwareCursor;
 
 class InteractableVisual extends Quad {
 
+    public var interactionRange: Float = 48.0;
     public var enabled(default, null): Bool = true;
     
     public function new(assets: Assets) {
@@ -27,7 +28,7 @@ class InteractableVisual extends Quad {
             final player = PlayerControllerSystem.instance.activePlayer ?? return;
             final dx = Math.abs(this.body.centerX - player.body.centerX);
             final dy = Math.abs(this.body.centerY - player.body.centerY);
-            if (Math.sqrt(dx * dx + dy * dy) <= 48.0) {
+            if (Math.sqrt(dx * dx + dy * dy) <= this.interactionRange) {
                 this.tryInteractDirectly();
             }
         });

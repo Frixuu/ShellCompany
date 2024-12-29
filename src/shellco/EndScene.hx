@@ -107,7 +107,7 @@ class EndScene extends SceneBase {
             final narrative = NarrativeSystem.instance;
             narrative.say("Ghost", "Uh, E.?", SayMode.Restart, true);
             narrative.say("Ghost", "Where am I?");
-            narrative.say("E.", "You see, it was all my master plan all along.");
+            narrative.say("E.", "You see, it was my master plan all along.");
             narrative.say("E.", "To trap you here.");
             narrative.say("E.", "I mean, I didn't want to betray you *at first*...");
             narrative.say("E.", "but Frixuu didn't have time to make this level.");

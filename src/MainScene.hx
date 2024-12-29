@@ -7,6 +7,7 @@ import ceramic.LdtkVisual;
 import ceramic.Quad;
 import ceramic.Tilemap;
 import ceramic.Timer;
+import shellco.BabyShark;
 import shellco.DroppedItem;
 import shellco.EndLevel;
 import shellco.EndScene;
@@ -35,6 +36,7 @@ class MainScene extends SceneBase {
         this.assets.addImage("levels/sheet_full");
         this.assets.addImage("levels/logos");
         this.assets.addImage("levels/big");
+        this.assets.addImage("shark");
         this.assets.addTilemap("levels/game_jam");
         this.assets.addImage("white");
         this.assets.addShader("outline");
@@ -170,9 +172,17 @@ class MainScene extends SceneBase {
                         narrative.say("Ghost", "I can literally hear you giving me the fish eye.");
                     };
                     visual;
+                } else if (entityDef.identifier == "shark") {
+                    final visual = new BabyShark(this.assets);
+                    visual.interactionRange = 100.0;
+                    visual.anchor(entityDef.pivotX, entityDef.pivotY);
+                    visual.size(entityDef.width, entityDef.height);
+                    visual.pos(ldtkEntity.pxX, ldtkEntity.pxY);
+                    
+                    visual;
                 } else if (entityDef.identifier == "end") {
                     final visual = new EndLevel(this.assets);
-                    visual.entryEnabled = true;
+                    visual.entryEnabled = false;
                     visual.anchor(entityDef.pivotX, entityDef.pivotY);
                     visual.size(entityDef.width, entityDef.height);
                     visual.pos(ldtkEntity.pxX, ldtkEntity.pxY);
