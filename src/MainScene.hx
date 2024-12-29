@@ -1,14 +1,13 @@
 // SPDX-License-Identifier: MIT
 package;
 
+import ceramic.AlphaColor;
 import ceramic.App;
-import ceramic.AssetOptions;
-import ceramic.Color;
 import ceramic.LdtkVisual;
 import ceramic.Quad;
-import ceramic.Text;
 import ceramic.Tilemap;
 import shellco.InteractableVisual;
+import shellco.MathTools;
 import shellco.PersistentScene;
 import shellco.SceneBase;
 import shellco.player.Player;
@@ -27,10 +26,12 @@ class MainScene extends SceneBase {
         this.assets.addSprite("player");
         this.assets.addImage("levels/sheet_full");
         this.assets.addImage("levels/logos");
-        this.assets.addImage("levels/ship");
+        this.assets.addImage("levels/big");
         this.assets.addTilemap("levels/game_jam");
         this.assets.addImage("white");
         this.assets.addShader("outline");
+        this.assets.addSound("audio/sfx/swim_1");
+        this.assets.addSound("audio/sfx/swim_2");
     }
     
     public override function create() {
@@ -40,23 +41,12 @@ class MainScene extends SceneBase {
     
     public override function ready() {
         super.ready();
-        final text = new Text();
-        text.color = Color.WHITE;
-        text.pointSize = 10;
-        text.anchor(0, 0);
-        text.font = {
-            final font = this.assets.font("fonts/minogram");
-            font;
-        };
-        text.content = "Hello World!";
-        text.pos(20, 20);
-        this.add(text);
         
         final tileset = this.assets.imageAsset("levels/sheet_full");
         tileset.texture.filter = NEAREST;
         
         this.assets.imageAsset("levels/logos").texture.filter = NEAREST;
-        this.assets.imageAsset("levels/ship").texture.filter = NEAREST;
+        this.assets.imageAsset("levels/big").texture.filter = NEAREST;
         
         final arcade = App.app.arcade;
         arcade.autoUpdateWorldBounds = false;
@@ -96,6 +86,13 @@ class MainScene extends SceneBase {
                     player.pos(ldtkEntity.pxX, ldtkEntity.pxY);
                     arcade.onUpdate(player, delta -> {
                         arcade.world.collide(player, tilemap);
+                    });
+                    App.app.onUpdate(player, _ -> {
+                        final colorShallow: AlphaColor = 0xFF1D8B73;
+                        final colorDeep: AlphaColor = 0xFF0B2234;
+                        final color = AlphaColor.interpolate(colorShallow, colorDeep,
+                            MathTools.clamp(((player.y - 200) * 0.003), 0.0, 1.0));
+                        tilemap.tilemapData.backgroundColor = color;
                     });
                     player;
                 } else if (entityDef.identifier == "mob") {

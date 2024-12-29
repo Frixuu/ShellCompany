@@ -13,4 +13,8 @@ final class MathTools {
             from + (maxDelta * Utils.sign(delta));
         };
     }
+    
+    public static function clamp(value: Float, min: Float, max: Float): Float {
+        return Math.max(min, Math.min(value, max));
+    }
 }

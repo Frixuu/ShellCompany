@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: MIT
 package shellco.player;
 
+import ceramic.App;
 import ceramic.InputMap;
 import ceramic.Logger;
+import ceramic.SoundAsset;
 import ceramic.System;
+import ceramic.Timer;
 import shellco.MathTools.moveTowards;
 import shellco.narrative.NarrativeSystem;
 
@@ -47,6 +50,20 @@ final class PlayerControllerSystem extends System {
         final narrative = NarrativeSystem.instance;
         narrative.onConvoAdvanced(this, line -> {
             this.enabled = line == null;
+        });
+        
+        final assets = App.app.assets;
+        assets.ensure("sound:audio/sfx/swim_1", null, null, a -> {
+            assets.ensure("sound:audio/sfx/swim_2", null, null, b -> {
+                Timer.interval(this, 1.0, () -> {
+                    final player = this.activePlayer ?? return;
+                    if (player.sprite.animation == "swim") {
+                        final sound = (cast((Math.random() > 0.5) ? a : b): SoundAsset).sound;
+                        final soundPlayer = sound.play(0.0, false, 0.1, 0.0,
+                            (1.0 + (Math.random() * 0.25 - 0.125)));
+                    }
+                });
+            });
         });
     }
     
