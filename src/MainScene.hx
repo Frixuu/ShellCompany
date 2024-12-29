@@ -35,12 +35,8 @@ class MainScene extends SceneBase {
     }
     
     public override function create() {
-        this.screenSpace = false;
         super.create();
-    }
-    
-    public override function ready() {
-        super.ready();
+        this.screenSpace = false;
         
         final tileset = this.assets.imageAsset("levels/sheet_full");
         tileset.texture.filter = NEAREST;
@@ -112,10 +108,6 @@ class MainScene extends SceneBase {
     
     public override function update(delta: Float) {
         // Here, you can add code that will be executed at every frame
-    }
-    
-    public override function resize(width: Float, height: Float) {
-        // Called everytime the scene size has changed
     }
     
     public override function destroy() {

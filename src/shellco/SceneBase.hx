@@ -53,4 +53,19 @@ abstract class SceneBase extends Scene {
             done();
         }
     }
+    
+    public override function fadeOut(done: () -> Void) {
+        final app = App.app;
+        final loadingScene: LoadingOverlayScene = cast app.scenes.get("loading");
+        
+        if (loadingScene != null) {
+            this.autoUpdate = false;
+            loadingScene.onceOkToTransition(this, () -> {
+                this.visible = false;
+                done();
+            });
+        } else {
+            done();
+        }
+    }
 }
