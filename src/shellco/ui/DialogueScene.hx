@@ -94,6 +94,16 @@ final class DialogueScene extends SceneBase {
             text;
         });
         
+        this.add({
+            final overlay = this.fullscreenHijackOverlay = new Overlay();
+            overlay.anchor(0.0, 0.0);
+            overlay.pos(0.0, 0.0);
+            overlay.size(Project.TARGET_WIDTH, Project.TARGET_HEIGHT);
+            overlay.depth = 99999;
+            overlay.transparent = true;
+            overlay;
+        });
+        
         this.hide();
     }
     
@@ -109,19 +119,9 @@ final class DialogueScene extends SceneBase {
         this.textMessage.visible = true;
         this.textMessage.content = line.text;
         
-        if (this.fullscreenHijackOverlay == null) {
-            this.add({
-                final overlay = this.fullscreenHijackOverlay = new Overlay();
-                overlay.anchor(0.0, 0.0);
-                overlay.pos(0.0, 0.0);
-                overlay.size(Project.TARGET_WIDTH, Project.TARGET_HEIGHT);
-                overlay.depth = 99999;
-                overlay.transparent = true;
-                overlay.visible = true;
-                overlay.onPointerOver(overlay, _ -> {}); // hack for no pointer event propagation
-                overlay;
-            });
-        }
+        final overlay = this.fullscreenHijackOverlay;
+        overlay.visible = true;
+        overlay.onPointerOver(overlay, _ -> {}); // hack for preventing pointer event propagation
         
         this.logger.info('[DIA] Showing a new line: ${line.text.substr(0, 10)}...');
     }
@@ -134,7 +134,9 @@ final class DialogueScene extends SceneBase {
         this.textName.visible = false;
         this.textMessage.visible = false;
         
-        this.fullscreenHijackOverlay?.destroy();
+        final overlay = this.fullscreenHijackOverlay;
+        overlay.visible = false;
+        overlay.offPointerOver(); // hack; ditto
         
         this.logger.info("[DIA] Hiding!");
     }
