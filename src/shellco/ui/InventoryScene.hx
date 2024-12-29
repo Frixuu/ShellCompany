@@ -11,6 +11,7 @@ import shellco.inventory.Cocktail;
 import shellco.inventory.InventorySystem;
 import shellco.inventory.ItemVisual;
 import shellco.inventory.Laxatives;
+import shellco.narrative.NarrativeSystem;
 
 using Lambda;
 using ceramic.SpritePlugin;
@@ -61,10 +62,15 @@ final class InventoryScene extends SceneBase {
         this.add({
             final trigger = new Quad();
             trigger.anchor(0.0, 0.0);
-            trigger.pos(0.0, -36.0);
+            trigger.pos(0.0, 0.0);
             trigger.size(Project.TARGET_WIDTH, 36);
             trigger.depth = 10;
-            trigger.transparent = true;
+            trigger.shader = {
+                final asset = this.assets.shader("shaders/single_color");
+                final shader = asset.clone();
+                shader.setAlphaColor("color", AlphaColor.TRANSPARENT);
+                shader;
+            };
             trigger.onPointerOver(this, _ -> {
                 this.panelShown = true;
             });

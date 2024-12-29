@@ -13,6 +13,13 @@ final class NarrativeSystem extends System {
     @lazy public static var instance: NarrativeSystem = new NarrativeSystem();
     
     private final lineQueue: List<DialogueLine> = new List();
+    private var currentLine: Null<DialogueLine> = null;
+    
+    public var inConversation(get, never): Bool;
+    
+    private function get_inConversation(): Bool {
+        return this.currentLine != null;
+    }
     
     @event public function convoAdvanced(line: Null<DialogueLine>);
     
@@ -59,6 +66,7 @@ final class NarrativeSystem extends System {
         if (line != null && line.callback != null) {
             line.callback();
         }
+        this.currentLine = line;
         this.emitConvoAdvanced(line);
     }
 }
