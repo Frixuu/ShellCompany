@@ -17,6 +17,8 @@ app:
   libs:
 
   defines:
+    - "ceramic_debug_touch_over"
+    - "ceramic_no_multitexture"
     - "analyzer_optimize"
     - "no_debug"
     - js_es: "6"

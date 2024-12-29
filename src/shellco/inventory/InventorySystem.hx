@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 package shellco.inventory;
 
+import ceramic.Logger;
 import ceramic.ReadOnlyArray;
 import ceramic.System;
 import haxe.ds.ObjectMap;
@@ -21,6 +22,8 @@ final class InventorySystem extends System {
     **/
     public var items(get, never): ReadOnlyArray<Item>;
     
+    private final logger: Logger = new Logger();
+    
     private inline function get_items(): ReadOnlyArray<Item> {
         return [for (key in this._items.keys()) key];
     }
@@ -32,12 +35,14 @@ final class InventorySystem extends System {
     public function addItem(item: Item) {
         if (!this._items.exists(item)) {
             this._items.set(item, true);
+            this.logger.info('[INV] Adding item: ${item}');
             this.emitItemAdded(item, this._items.count());
         }
     }
     
     public function removeItem(item: Item) {
         if (this._items.remove(item)) {
+            this.logger.info('[INV] Removing item: ${item}');
             this.emitItemRemoved(item, this._items.count());
         }
     }

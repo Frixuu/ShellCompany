@@ -6,10 +6,14 @@ import ceramic.App;
 import ceramic.LdtkVisual;
 import ceramic.Quad;
 import ceramic.Tilemap;
+import ceramic.Timer;
+import shellco.DroppedItem;
 import shellco.InteractableVisual;
 import shellco.MathTools;
 import shellco.PersistentScene;
 import shellco.SceneBase;
+import shellco.inventory.Key;
+import shellco.narrative.NarrativeSystem;
 import shellco.player.Player;
 
 using ceramic.SpritePlugin;
@@ -24,12 +28,14 @@ class MainScene extends SceneBase {
     
     public override function preload() {
         this.assets.addSprite("player");
+        this.assets.addSprite("item");
         this.assets.addImage("levels/sheet_full");
         this.assets.addImage("levels/logos");
         this.assets.addImage("levels/big");
         this.assets.addTilemap("levels/game_jam");
         this.assets.addImage("white");
         this.assets.addShader("outline");
+        this.assets.addShader("shaders/single_color");
         this.assets.addSound("audio/sfx/swim_1");
         this.assets.addSound("audio/sfx/swim_2");
         this.assets.addSound("audio/music/aquaria", {stream: true});
@@ -92,11 +98,17 @@ class MainScene extends SceneBase {
                         tilemap.tilemapData.backgroundColor = color;
                     });
                     player;
-                } else if (entityDef.identifier == "mob") {
-                    final visual = new InteractableVisual(this.assets);
-                    visual.anchor(0, 0);
-                    visual.size(16, 16);
+                } else if (entityDef.identifier == "gate_key") {
+                    final visual = new DroppedItem(this.assets, new Key());
+                    visual.anchor(entityDef.pivotX, entityDef.pivotY);
+                    visual.size(entityDef.width, entityDef.height);
                     visual.pos(ldtkEntity.pxX, ldtkEntity.pxY);
+                    visual.afterPickup = () -> {
+                        final narrative = NarrativeSystem.instance;
+                        narrative.say("Ghost", "You know what they say.", Restart, true);
+                        narrative.say("Ghost", "Communication is the *key* to success.");
+                        narrative.say("E.", "I should ask for a raise.");
+                    };
                     visual;
                 } else if (entityDef.isRenderable(Tile)) {
                     new LdtkVisual(ldtkEntity);
@@ -105,6 +117,25 @@ class MainScene extends SceneBase {
                 };
             });
         });
+        
+        final narrative = NarrativeSystem.instance;
+        narrative.say("Ghost", "Hey, E.");
+        narrative.say("E.", "Yes, agent Ghost?");
+        narrative.say("Ghost", "Would you mind briefing me again?");
+        narrative.say("Ghost",
+            "I *totally* remember every thing you've said, but I want to be extra sure.");
+        narrative.say("E.", "...");
+        narrative.say("E.", "Right.");
+        narrative.say("E.", "Your task is to infiltrate the Fish & Chips casino.");
+        narrative.say("E.",
+            "There were rumors about potential Animals activity. " +
+            "We suspect they have a hideout nearby.");
+        narrative.say("Ghost",
+            "And you pay me to find out what's going on. See? I remember everything.");
+        narrative.say("Ghost", "I'm a ghostfish, not a goldfish.");
+        narrative.say("E.", "*ughhh*");
+        
+        // Timer.delay(this, 3.0, () -> narrative.advanceConvo());
     }
     
     public override function ready() {

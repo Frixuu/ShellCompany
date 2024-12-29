@@ -5,6 +5,7 @@ import ceramic.AlphaColor;
 import ceramic.App;
 import ceramic.Color;
 import ceramic.InputMap;
+import ceramic.Logger;
 import ceramic.Quad;
 import ceramic.ScanCode;
 import ceramic.Sprite;
@@ -19,17 +20,21 @@ private enum abstract ConvoAction(Int) {
     public var Advance;
 }
 
+class Overlay extends Quad {}
+class Background extends Quad {}
+
 /**
     This scene displays narrative elements, like conversations, etc.
 **/
 final class DialogueScene extends SceneBase {
 
-    private var fullscreenHijackOverlay: Quad = null;
-    private var background: Quad = null;
+    private var fullscreenHijackOverlay: Null<Overlay> = null;
+    private var background: Background = null;
     private var textName: Text = null;
     private var textMessage: Text = null;
     private var portrait: Sprite = null;
     private var currentLine: Null<DialogueLine> = null;
+    private final logger: Logger = new Logger();
     private final inputMap: InputMap<ConvoAction> = {
         final map = new InputMap<ConvoAction>();
         map.bindScanCode(Advance, ScanCode.SPACE);
@@ -49,7 +54,7 @@ final class DialogueScene extends SceneBase {
         this.depth = 10000;
         
         this.add({
-            final bg = this.background = new Quad();
+            final bg = this.background = new Background();
             bg.anchor(0, 0);
             bg.pos(0, 112);
             bg.size(Project.TARGET_WIDTH, 60);
@@ -89,16 +94,6 @@ final class DialogueScene extends SceneBase {
             text;
         });
         
-        this.add({
-            final overlay = this.fullscreenHijackOverlay = new Quad();
-            overlay.anchor(0.0, 0.0);
-            overlay.pos(0.0, 0.0);
-            overlay.size(Project.TARGET_WIDTH, Project.TARGET_HEIGHT);
-            overlay.depth = 99999;
-            overlay.transparent = true;
-            overlay;
-        });
-        
         this.hide();
     }
     
@@ -114,9 +109,21 @@ final class DialogueScene extends SceneBase {
         this.textMessage.visible = true;
         this.textMessage.content = line.text;
         
-        final overlay = this.fullscreenHijackOverlay;
-        overlay.visible = true;
-        overlay.onPointerOver(overlay, _ -> {}); // hack for preventing pointer event propagation
+        if (this.fullscreenHijackOverlay == null) {
+            this.add({
+                final overlay = this.fullscreenHijackOverlay = new Overlay();
+                overlay.anchor(0.0, 0.0);
+                overlay.pos(0.0, 0.0);
+                overlay.size(Project.TARGET_WIDTH, Project.TARGET_HEIGHT);
+                overlay.depth = 99999;
+                overlay.transparent = true;
+                overlay.visible = true;
+                overlay.onPointerOver(overlay, _ -> {}); // hack for no pointer event propagation
+                overlay;
+            });
+        }
+        
+        this.logger.info('[DIA] Showing a new line: ${line.text.substr(0, 10)}...');
     }
     
     private function hide() {
@@ -127,9 +134,9 @@ final class DialogueScene extends SceneBase {
         this.textName.visible = false;
         this.textMessage.visible = false;
         
-        final overlay = this.fullscreenHijackOverlay;
-        overlay.visible = false;
-        overlay.offPointerOver(); // hack; ditto
+        this.fullscreenHijackOverlay?.destroy();
+        
+        this.logger.info("[DIA] Hiding!");
     }
     
     public override function ready() {
@@ -142,31 +149,6 @@ final class DialogueScene extends SceneBase {
                 this.hide();
             }
         });
-        
-        narrative.say("Ghost", "Hey, E.");
-        narrative.say("E.", "Yes, agent Ghost?");
-        narrative.say("Ghost", "Would you mind briefing me again?");
-        narrative.say("Ghost",
-            "I *totally* remember every detail you've said, but I want to be extra sure.");
-        narrative.say("E.", "...");
-        narrative.say("E.", "Right.");
-        narrative.say("E.", "Your task is to infiltrate the Fish & Chips casino.");
-        narrative.say("E.",
-            "There were rumors about potential Animals activity. " +
-            "We suspect they have a hideout nearby.");
-        narrative.say("Ghost", "And I must know what's going on. See? I remember everything.");
-        narrative.say("Ghost", "I'm a ghostfish, not a goldfish.");
-        narrative.say("E.", "*ughhh*", () -> {
-            Timer.delay(this, 10.0, () -> {
-                narrative.say("E.", "It seems we're in luck. Baby Shark works the door today.",
-                    true);
-                narrative.say("Ghost", "...Like, a literal baby? A security guard?");
-                narrative.say("E.", "No. He has bowel problems and wears a diaper at all times.");
-                narrative.say("Ghost", "Ah. Should've guessed.");
-            });
-        });
-        
-        Timer.delay(this, 3.0, () -> narrative.advanceConvo());
     }
     
     public override function update(delta: Float) {

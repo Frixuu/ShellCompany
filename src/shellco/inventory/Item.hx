@@ -8,4 +8,8 @@ abstract class Item {
     public function tryCombine(other: Item): Null<Item> {
         return null;
     }
+    
+    public function toString(): String {
+        return 'Item("${this.spriteName()}")';
+    }
 }
