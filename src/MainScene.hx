@@ -13,7 +13,9 @@ import shellco.Lock;
 import shellco.MathTools;
 import shellco.PersistentScene;
 import shellco.SceneBase;
+import shellco.inventory.Cocktail;
 import shellco.inventory.Key;
+import shellco.inventory.Laxatives;
 import shellco.narrative.NarrativeSystem;
 import shellco.player.Player;
 
@@ -109,6 +111,39 @@ class MainScene extends SceneBase {
                         narrative.say("Ghost", "You know what they say.", true);
                         narrative.say("Ghost", "Communication is the *key* to success.");
                         narrative.say("E.", "I should ask for a raise.");
+                    };
+                    visual;
+                } else if (entityDef.identifier == "xlax") {
+                    final visual = new DroppedItem(this.assets, new Laxatives());
+                    visual.anchor(entityDef.pivotX, entityDef.pivotY);
+                    visual.size(entityDef.width, entityDef.height);
+                    visual.pos(ldtkEntity.pxX, ldtkEntity.pxY);
+                    visual.afterPickup = () -> {
+                        final narrative = NarrativeSystem.instance;
+                        narrative.say("Ghost",
+                            "Hey E. You said this Baby had \"bowel problems?\"", true);
+                        narrative.say("Ghost",
+                            "I have a bunch of laxatives here. Almost not expired, too.");
+                        narrative.say("Ghost",
+                            "Do you think they'll help get me rid of that henchman?");
+                        narrative.say("E.", "That's... the smartest thing you said today.");
+                        narrative.say("E.", "But how are you going to convince him to eat them?");
+                        narrative.say("Ghost", "I'm working on it.");
+                    };
+                    visual;
+                } else if (entityDef.identifier == "cocktail") {
+                    final visual = new DroppedItem(this.assets, new Cocktail());
+                    visual.anchor(entityDef.pivotX, entityDef.pivotY);
+                    visual.size(entityDef.width, entityDef.height);
+                    visual.pos(ldtkEntity.pxX, ldtkEntity.pxY);
+                    visual.afterPickup = () -> {
+                        final narrative = NarrativeSystem.instance;
+                        narrative.say("Note", "Property of Amei and Capros.", true);
+                        narrative.say("Note",
+                            "Please leave this place as-is or feel the wrath of the Animals.");
+                        narrative.say("Note", "Thank you xoxo");
+                        narrative.say("Ghost", "E., do you drink on the job often?");
+                        narrative.say("E.", "With you on call? I very strongly consider it.");
                     };
                     visual;
                 } else if (entityDef.identifier == "lock") {
