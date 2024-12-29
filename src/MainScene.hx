@@ -32,6 +32,7 @@ class MainScene extends SceneBase {
         this.assets.addShader("outline");
         this.assets.addSound("audio/sfx/swim_1");
         this.assets.addSound("audio/sfx/swim_2");
+        this.assets.addSound("audio/music/aquaria", {stream: true});
     }
     
     public override function create() {
@@ -104,6 +105,11 @@ class MainScene extends SceneBase {
                 };
             });
         });
+    }
+    
+    public override function ready() {
+        super.ready();
+        this.assets.sound("audio/music/aquaria").play(0, true, 0.3);
     }
     
     public override function update(delta: Float) {

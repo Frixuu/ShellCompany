@@ -166,7 +166,7 @@ final class DialogueScene extends SceneBase {
             });
         });
         
-        Timer.delay(this, 1.0, () -> narrative.advanceConvo());
+        Timer.delay(this, 3.0, () -> narrative.advanceConvo());
     }
     
     public override function update(delta: Float) {

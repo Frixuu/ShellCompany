@@ -94,9 +94,6 @@ final class InventoryScene extends SceneBase {
             Assert.assert(this.itemVisuals.length == n);
             this.recalculateItemVisuals();
         });
-        
-        Timer.delay(this, 0.3, () -> inventory.addItem(new Cocktail()));
-        Timer.delay(this, 0.8, () -> inventory.addItem(new Laxatives()));
     }
     
     public override function update(delta: Float) {
