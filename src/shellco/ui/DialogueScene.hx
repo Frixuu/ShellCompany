@@ -156,7 +156,7 @@ final class DialogueScene extends SceneBase {
     public override function update(delta: Float) {
         super.update(delta);
         if (this.currentLine != null && this.inputMap.justPressed(Advance)) {
-            NarrativeSystem.instance.advanceConvo();
+            Timer.delay(this, 0.0001, () -> NarrativeSystem.instance.advanceConvo());
         }
     }
 }

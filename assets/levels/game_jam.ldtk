@@ -1246,7 +1246,7 @@
 						},
 						{
 							"__identifier": "shark",
-							"__grid": [10,21],
+							"__grid": [59,27],
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
@@ -1255,10 +1255,10 @@
 							"width": 48,
 							"height": 24,
 							"defUid": 153,
-							"px": [168,352],
+							"px": [952,448],
 							"fieldInstances": [],
-							"__worldX": 168,
-							"__worldY": 352
+							"__worldX": 952,
+							"__worldY": 448
 						}
 					]
 				},

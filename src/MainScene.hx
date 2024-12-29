@@ -150,6 +150,7 @@ class MainScene extends SceneBase {
                     visual;
                 } else if (entityDef.identifier == "lock") {
                     final visual = new Lock(this.assets);
+                    visual.interactionRange = 70.0;
                     visual.anchor(entityDef.pivotX, entityDef.pivotY);
                     visual.size(entityDef.width, entityDef.height);
                     visual.pos(ldtkEntity.pxX, ldtkEntity.pxY);
@@ -169,7 +170,20 @@ class MainScene extends SceneBase {
                         narrative.say("Ghost", "Aaaand, opeeen!", true);
                         narrative.say("Ghost", "Like shooting fish in a barrel.");
                         narrative.say("E.", "...");
-                        narrative.say("Ghost", "I can literally hear you giving me the fish eye.");
+                        narrative.say("Ghost", "I can literally hear you giving me the fish eye.",
+                            () -> {
+                                Timer.delay(this, 10.0, () -> {
+                                    final narrative = NarrativeSystem.instance;
+                                    narrative.say("E.",
+                                        "It seems we're in luck. Baby Shark works the door today.",
+                                        true);
+                                    narrative.say("Ghost",
+                                        "...Like, a literal baby? A security guard?");
+                                    narrative.say("E.",
+                                        "No. He has bowel problems and wears a diaper at all times.");
+                                    narrative.say("Ghost", "Ah. Should've guessed.");
+                                });
+                            });
                     };
                     visual;
                 } else if (entityDef.identifier == "shark") {
@@ -197,9 +211,10 @@ class MainScene extends SceneBase {
                 };
             });
         });
-        /*
+        
+        Timer.delay(this, 3.0, () -> {
             final narrative = NarrativeSystem.instance;
-            narrative.say("Ghost", "Hey, E.");
+            narrative.say("Ghost", "Hey, E.", true);
             narrative.say("E.", "Yes, agent Ghost?");
             narrative.say("Ghost", "Would you mind briefing me again?");
             narrative.say("Ghost",
@@ -214,8 +229,7 @@ class MainScene extends SceneBase {
                 "And you pay me to find out what's going on. See? I remember everything.");
             narrative.say("Ghost", "I'm a ghostfish, not a goldfish.");
             narrative.say("E.", "*ughhh*");
-            Timer.delay(this, 3.0, () -> narrative.advanceConvo());
-         */
+        });
     }
     
     public override function ready() {
