@@ -16,11 +16,20 @@ final class NarrativeSystem extends System {
     
     @event public function convoAdvanced(line: Null<DialogueLine>);
     
+    /**
+        Registers a dialogue line.
+        @param name The name of the character saying things.
+        @param message The thing to say.
+        @param nameColor The color of the character name.
+        @param mode Queue mode (how soon should the line happen).
+        @param startIfNothingToSay If this is the only line, auto-starts a conversation.
+    **/
     public function say(
         name: String,
         message: String,
         nameColor: Color = Color.WHITE,
-        mode: SayMode = Queue
+        mode: SayMode = Queue,
+        startIfNothingToSay: Bool = true
     ) {
         final line: DialogueLine = {characterName: name, text: message, nameColor: nameColor};
         final queue = this.lineQueue;
@@ -32,7 +41,10 @@ final class NarrativeSystem extends System {
             case Restart:
                 queue.clear();
                 queue.add(line);
-                this.advanceConvo();
+        }
+        
+        if (startIfNothingToSay && queue.length == 1) {
+            this.advanceConvo();
         }
     }
     

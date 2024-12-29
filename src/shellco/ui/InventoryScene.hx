@@ -93,7 +93,7 @@ final class InventoryScene extends SceneBase {
             this.recalculateItemVisuals();
         });
         
-        Timer.delay(this, 0.3, () -> inventory.addItem(new Item()));
+        Timer.delay(this, 5.3, () -> inventory.addItem(new Item()));
         Timer.delay(this, 5.4, () -> inventory.addItem(new Item()));
     }
     
@@ -101,7 +101,8 @@ final class InventoryScene extends SceneBase {
         super.update(delta);
         this.timeSinceLastItemAdded += delta;
         
-        final show = this.panelShown || (this.timeSinceLastItemAdded < 2.0);
+        final show = (this.panelShown && this.itemVisuals.length > 0)
+            || (this.timeSinceLastItemAdded < 2.0);
         this.panel.y = MathTools.moveTowards(this.panel.y, (show ? 0.0 : -36.0), 200.0 * delta);
     }
     

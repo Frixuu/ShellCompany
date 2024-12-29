@@ -2,6 +2,7 @@
 package;
 
 import ceramic.App;
+import ceramic.AssetOptions;
 import ceramic.Color;
 import ceramic.LdtkVisual;
 import ceramic.Quad;
@@ -25,6 +26,8 @@ class MainScene extends SceneBase {
     public override function preload() {
         this.assets.addSprite("player");
         this.assets.addImage("levels/sheet_full");
+        this.assets.addImage("levels/logos");
+        this.assets.addImage("levels/ship");
         this.assets.addTilemap("levels/game_jam");
         this.assets.addImage("white");
         this.assets.addShader("outline");
@@ -51,6 +54,9 @@ class MainScene extends SceneBase {
         
         final tileset = this.assets.imageAsset("levels/sheet_full");
         tileset.texture.filter = NEAREST;
+        
+        this.assets.imageAsset("levels/logos").texture.filter = NEAREST;
+        this.assets.imageAsset("levels/ship").texture.filter = NEAREST;
         
         final arcade = App.app.arcade;
         arcade.autoUpdateWorldBounds = false;
