@@ -59,7 +59,7 @@ class BabyShark extends InteractableVisual {
                 narrative.say("Baby Shark", "Ha. Thanks, but you're not coming in anyw-");
                 narrative.say("Baby Shark", "....", () -> {
                     this.scaleX = -1.0;
-                    Tween.start(this, QUAD_EASE_IN, 3.0, this.x, (this.x + 1300), (v, t) -> {
+                    Tween.start(this, QUAD_EASE_IN, 2.0, this.x, (this.x + 700), (v, t) -> {
                         this.x = v;
                     }).onceComplete(this, () -> {
                         this.destroy();

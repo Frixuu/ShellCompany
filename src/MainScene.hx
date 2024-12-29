@@ -172,7 +172,7 @@ class MainScene extends SceneBase {
                         narrative.say("E.", "...");
                         narrative.say("Ghost", "I can literally hear you giving me the fish eye.",
                             () -> {
-                                Timer.delay(this, 10.0, () -> {
+                                Timer.delay(this, 5.0, () -> {
                                     final narrative = NarrativeSystem.instance;
                                     narrative.say("E.",
                                         "It seems we're in luck. Baby Shark works the door today.",
