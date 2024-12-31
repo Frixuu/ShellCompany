@@ -1,0 +1,2 @@
+*.png -filter -diff -merge
+*.webp -filter -diff -merge
