@@ -4,14 +4,12 @@ package;
 import ceramic.AlphaColor;
 import ceramic.App;
 import ceramic.LdtkVisual;
-import ceramic.Quad;
 import ceramic.Tilemap;
 import ceramic.Timer;
 import shellco.BabyShark;
 import shellco.DroppedItem;
 import shellco.EndLevel;
 import shellco.EndScene;
-import shellco.InteractableVisual;
 import shellco.Lock;
 import shellco.MathTools;
 import shellco.PersistentScene;
@@ -19,6 +17,7 @@ import shellco.SceneBase;
 import shellco.inventory.Cocktail;
 import shellco.inventory.Key;
 import shellco.inventory.Laxatives;
+import shellco.level.EntityFactory;
 import shellco.narrative.NarrativeSystem;
 import shellco.player.Player;
 
@@ -81,17 +80,17 @@ class MainScene extends SceneBase {
             camera.contentHeight = level.pxHei;
             
             App.app.onPostUpdate(tilemap, _ -> {
-                tilemap.clipTiles(Math.floor(camera.x - camera.viewportWidth * 0.5),
-                    Math.floor(camera.y - camera.viewportHeight * 0.5),
+                tilemap.clipTiles(Math.floor(camera.x - camera.viewportWidth * 0.55),
+                    Math.floor(camera.y - camera.viewportHeight * 0.55),
                     Math.ceil(camera.viewportWidth) + tilemap.tilemapData.maxTileWidth,
                     Math.ceil(camera.viewportHeight) + tilemap.tilemapData.maxTileHeight);
             });
             
-            level.createVisualsForEntities(tilemap, null, ldtkEntity -> {
-                final entityDef = ldtkEntity.def;
-                return if (entityDef.identifier == "player") {
+            final entityFactory = new EntityFactory();
+            entityFactory.addRule({
+                predicate: e -> e.def.identifier == "player",
+                producer: _ -> {
                     final player = new Player(this.assets);
-                    player.pos(ldtkEntity.pxX, ldtkEntity.pxY);
                     arcade.onUpdate(player, delta -> {
                         arcade.world.collide(player, tilemap);
                     });
@@ -103,24 +102,24 @@ class MainScene extends SceneBase {
                         tilemap.tilemapData.backgroundColor = color;
                     });
                     player;
-                } else if (entityDef.identifier == "gate_key") {
-                    final visual = new DroppedItem(this.assets, new Key());
-                    visual.anchor(entityDef.pivotX, entityDef.pivotY);
-                    visual.size(entityDef.width, entityDef.height);
-                    visual.pos(ldtkEntity.pxX, ldtkEntity.pxY);
-                    visual.afterPickup = () -> {
+                },
+            }).addRule({
+                predicate: e -> e.def.identifier == "gate_key",
+                producer: _ -> {
+                    final key = new DroppedItem(this.assets, new Key());
+                    key.afterPickup = () -> {
                         final narrative = NarrativeSystem.instance;
                         narrative.say("Ghost", "You know what they say.", true);
                         narrative.say("Ghost", "Communication is the *key* to success.");
                         narrative.say("E.", "I should ask for a raise.");
                     };
-                    visual;
-                } else if (entityDef.identifier == "xlax") {
-                    final visual = new DroppedItem(this.assets, new Laxatives());
-                    visual.anchor(entityDef.pivotX, entityDef.pivotY);
-                    visual.size(entityDef.width, entityDef.height);
-                    visual.pos(ldtkEntity.pxX, ldtkEntity.pxY);
-                    visual.afterPickup = () -> {
+                    key;
+                },
+            }).addRule({
+                predicate: e -> e.def.identifier == "xlax",
+                producer: _ -> {
+                    final laxatives = new DroppedItem(this.assets, new Laxatives());
+                    laxatives.afterPickup = () -> {
                         final narrative = NarrativeSystem.instance;
                         narrative.say("Ghost",
                             "Hey E. You said this Baby had \"bowel problems?\"", true);
@@ -132,13 +131,13 @@ class MainScene extends SceneBase {
                         narrative.say("E.", "But how are you going to convince him to eat them?");
                         narrative.say("Ghost", "I'm working on it.");
                     };
-                    visual;
-                } else if (entityDef.identifier == "cocktail") {
-                    final visual = new DroppedItem(this.assets, new Cocktail());
-                    visual.anchor(entityDef.pivotX, entityDef.pivotY);
-                    visual.size(entityDef.width, entityDef.height);
-                    visual.pos(ldtkEntity.pxX, ldtkEntity.pxY);
-                    visual.afterPickup = () -> {
+                    laxatives;
+                },
+            }).addRule({
+                predicate: e -> e.def.identifier == "cocktail",
+                producer: _ -> {
+                    final cocktail = new DroppedItem(this.assets, new Cocktail());
+                    cocktail.afterPickup = () -> {
                         final narrative = NarrativeSystem.instance;
                         narrative.say("Note", "Property of Amei and Capros.", true);
                         narrative.say("Note",
@@ -147,13 +146,20 @@ class MainScene extends SceneBase {
                         narrative.say("Ghost", "E., do you drink on the job often?");
                         narrative.say("E.", "With you on call? I very strongly consider it.");
                     };
-                    visual;
-                } else if (entityDef.identifier == "lock") {
+                    cocktail;
+                },
+            }).addRule({
+                predicate: e -> e.def.identifier == "shark",
+                producer: _ -> {
+                    final shark = new BabyShark(this.assets);
+                    shark.interactionRange = 100.0;
+                    shark;
+                },
+            }).addRule({
+                predicate: e -> e.def.identifier == "lock",
+                producer: _ -> {
                     final visual = new Lock(this.assets);
                     visual.interactionRange = 70.0;
-                    visual.anchor(entityDef.pivotX, entityDef.pivotY);
-                    visual.size(entityDef.width, entityDef.height);
-                    visual.pos(ldtkEntity.pxX, ldtkEntity.pxY);
                     visual.afterUse = () -> {
                     
                         final foreground = tilemap.layer("foreground").layerData;
@@ -186,30 +192,23 @@ class MainScene extends SceneBase {
                             });
                     };
                     visual;
-                } else if (entityDef.identifier == "shark") {
-                    final visual = new BabyShark(this.assets);
-                    visual.interactionRange = 100.0;
-                    visual.anchor(entityDef.pivotX, entityDef.pivotY);
-                    visual.size(entityDef.width, entityDef.height);
-                    visual.pos(ldtkEntity.pxX, ldtkEntity.pxY);
-                    
-                    visual;
-                } else if (entityDef.identifier == "end") {
+                },
+            }).addRule({
+                predicate: e -> e.def.identifier == "end",
+                producer: _ -> {
                     final visual = new EndLevel(this.assets);
                     visual.entryEnabled = false;
-                    visual.anchor(entityDef.pivotX, entityDef.pivotY);
-                    visual.size(entityDef.width, entityDef.height);
-                    visual.pos(ldtkEntity.pxX, ldtkEntity.pxY);
                     visual.onGo = () -> {
                         App.app.scenes.set("main", new EndScene());
                     };
                     visual;
-                } else if (entityDef.isRenderable(Tile)) {
-                    new LdtkVisual(ldtkEntity);
-                } else {
-                    null;
-                };
+                },
+            }).addRule({
+                predicate: e -> e.def.isRenderable(Tile),
+                producer: e -> new LdtkVisual(e),
             });
+            
+            level.createVisualsForEntities(tilemap, null, entityFactory.createVisualForLdtkEntity);
         });
         
         Timer.delay(this, 3.0, () -> {
