@@ -6,17 +6,9 @@ import ceramic.App;
 import ceramic.LdtkVisual;
 import ceramic.Quad;
 import ceramic.Tilemap;
-import ceramic.Timer;
-import shellco.DroppedItem;
-import shellco.EndLevel;
-import shellco.InteractableVisual;
-import shellco.Lock;
 import shellco.MathTools;
 import shellco.PersistentScene;
 import shellco.SceneBase;
-import shellco.inventory.Cocktail;
-import shellco.inventory.Key;
-import shellco.inventory.Laxatives;
 import shellco.narrative.NarrativeSystem;
 import shellco.player.Player;
 
@@ -92,8 +84,11 @@ class EndScene extends SceneBase {
                     App.app.onUpdate(player, _ -> {
                         final colorShallow: AlphaColor = 0xFF1D8B73;
                         final colorDeep: AlphaColor = 0xFF0B2234;
-                        final color = AlphaColor.interpolate(colorShallow, colorDeep,
-                            MathTools.clamp(((player.y - 200) * 0.003), 0.0, 1.0));
+                        final color = AlphaColor.interpolate(
+                            colorShallow,
+                            colorDeep,
+                            MathTools.clamp(((player.y - 200) * 0.003), 0.0, 1.0)
+                        );
                         tilemap.tilemapData.backgroundColor = color;
                     });
                     player;

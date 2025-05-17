@@ -59,8 +59,13 @@ final class PlayerControllerSystem extends System {
                     final player = this.activePlayer ?? return;
                     if (player.sprite.animation == "swim") {
                         final sound = (cast((Math.random() > 0.5) ? a : b): SoundAsset).sound;
-                        final soundPlayer = sound.play(0.0, false, 0.1, 0.0,
-                            (1.0 + (Math.random() * 0.25 - 0.125)));
+                        final soundPlayer = sound.play(
+                            0.0,
+                            false,
+                            0.1,
+                            0.0,
+                            (1.0 + (Math.random() * 0.25 - 0.125))
+                        );
                     }
                 });
             });

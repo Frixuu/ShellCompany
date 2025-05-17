@@ -66,10 +66,16 @@ final class LoadingOverlayScene extends Scene {
         });
         this.onTransitionEnded(this, () -> {
             this.soundTween?.destroy();
-            this.soundTween = Tween.start(this, QUAD_EASE_OUT, fadeTime, volume, 0.0,
+            this.soundTween = Tween.start(
+                this,
+                QUAD_EASE_OUT,
+                fadeTime,
+                volume,
+                0.0,
                 (value, _) -> {
                     soundPlayer.volume = value;
-                });
+                }
+            );
             this.soundTween.onceComplete(this, () -> {
                 soundPlayer.pause();
             });

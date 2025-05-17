@@ -74,17 +74,51 @@
     "maxLineLength": 100,
     "arrayMatrixWrap": "matrixWrapWithAlign",
     "arrayWrap": {
-      "defaultLocation": "afterLast"
+      "defaultWrap": "onePerLine",
+      "defaultLocation": "afterLast",
+      "rules": [
+        {
+          "conditions": [
+            {
+              "cond": "lineLength <= n",
+              "value": 100
+            }
+          ],
+          "type": "noWrap"
+        }
+      ]
     },
     "callParameter": {
-      "defaultWrap": "fillLine"
+      "defaultWrap": "onePerLine",
+      "rules": [
+        {
+          "conditions": [
+            {
+              "cond": "lineLength <= n",
+              "value": 100
+            }
+          ],
+          "type": "fillLine"
+        }
+      ]
     },
     "casePattern": {
       "defaultWrap": "fillLine"
     },
     "methodChain": {
-      "defaultWrap": "fillLine",
-      "defaultLocation": "afterLast"
+      "defaultWrap": "onePerLineAfterFirst",
+      "defaultLocation": "afterLast",
+      "rules": [
+        {
+          "conditions": [
+            {
+              "cond": "lineLength <= n",
+              "value": 100
+            }
+          ],
+          "type": "fillLine"
+        }
+      ]
     },
     "functionSignature": {
       "defaultWrap": "onePerLine",
@@ -100,6 +134,27 @@
           "type": "noWrap"
         }
       ]
+    },
+    "implementsExtends": {
+      "defaultAdditionalIndent": 1,
+      "defaultWrap": "onePerLine",
+      "defaultLocation": "afterLast",
+      "rules": [
+        {
+          "conditions": [
+            {
+              "cond": "lineLength <= n",
+              "value": 100
+            }
+          ],
+          "type": "noWrap"
+        }
+      ]
+    },
+    "typeParameter": {
+      "defaultAdditionalIndent": 1,
+      "defaultWrap": "keep",
+      "defaultLocation": "beforeLast"
     }
   }
 }

@@ -126,7 +126,9 @@ final class ItemVisual extends Quad {
             if (target is ItemVisual) {
                 final target: ItemVisual = cast target;
                 app.logger.info('trying to combine items ${this.item} and ${target.item}');
-                final resultItem = this.item.tryCombine(target.item) ?? target.item.tryCombine(this.item);
+                final resultItem = this.item.tryCombine(
+                    target.item
+                ) ?? target.item.tryCombine(this.item);
                 if (resultItem != null) {
                     final inventory = InventorySystem.instance;
                     inventory.removeItem(this.item);

@@ -2,9 +2,7 @@
 package shellco;
 
 import ceramic.AlphaColor;
-import ceramic.App;
 import ceramic.Assets;
-import ceramic.Color;
 import ceramic.Sprite;
 import ceramic.Timer;
 import shellco.inventory.InventorySystem;
@@ -75,8 +73,11 @@ class Lock extends InteractableVisual {
             this.interacted = true;
             Timer.delay(this, 0.0001, () -> {
                 final narrative = NarrativeSystem.instance;
-                narrative.say("Ghost", "Great. It's locked. Why have you sent me this way again?",
-                    true);
+                narrative.say(
+                    "Ghost",
+                    "Great. It's locked. Why have you sent me this way again?",
+                    true
+                );
                 narrative.say("E.", "Focus. There must be a way out.");
             });
         }

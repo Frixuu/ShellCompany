@@ -30,8 +30,10 @@ abstract class SceneBase extends Scene {
             final persistentScene: PersistentScene = cast App.app.scenes.get("persistent");
             final camera = persistentScene?.mainCamera ?? return;
             if (!this.screenSpace) {
-                this.translate(Math.round(camera.contentTranslateX),
-                    Math.round(camera.contentTranslateY));
+                this.translate(
+                    Math.round(camera.contentTranslateX),
+                    Math.round(camera.contentTranslateY)
+                );
             }
         });
     }
