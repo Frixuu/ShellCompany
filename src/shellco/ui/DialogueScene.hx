@@ -54,44 +54,45 @@ final class DialogueScene extends SceneBase {
         this.depth = 10000;
         
         this.add({
-            final bg = this.background = new Background();
-            bg.anchor(0, 0);
-            bg.pos(0, 112);
-            bg.size(Project.TARGET_WIDTH, 60);
-            bg.blending = ALPHA;
-            bg.shader = {
+            final background = this.background = new Background();
+            background.anchor(0, 0);
+            background.pos(0, Project.TARGET_HEIGHT - (60 + 8));
+            background.size(Project.TARGET_WIDTH, 60);
+            background.blending = ALPHA;
+            background.shader = {
                 final asset = this.assets.shader("shaders/single_color");
                 final shader = asset.clone();
                 shader.setAlphaColor("color", new AlphaColor(Color.BLACK, 170));
                 shader;
             };
-            bg;
-        });
-        
-        this.add({
-            final portrait = this.portrait = new Sprite();
-            portrait.size(128, 128);
-            portrait.anchor(0.0, 0.0);
-            portrait.pos(0.0, Project.TARGET_HEIGHT - 128);
-            portrait.sheet = this.assets.sheet("portraits");
-            portrait;
-        });
-        
-        this.add({
-            final text = this.textName = new Text();
-            text.pointSize = 20;
-            text.anchor(0, 0);
-            text.pos(100, 115);
-            text;
-        });
-        
-        this.add({
-            final text = this.textMessage = new Text();
-            text.pointSize = 10;
-            text.anchor(0.0, 0.0);
-            text.pos(100, 136);
-            text.fitWidth = 210;
-            text;
+            
+            background.add({
+                final portrait = this.portrait = new Sprite();
+                portrait.size(128, 128);
+                portrait.anchor(0, 0);
+                portrait.pos(0, -60);
+                portrait.sheet = this.assets.sheet("portraits");
+                portrait;
+            });
+            
+            background.add({
+                final text = this.textName = new Text();
+                text.pointSize = 20;
+                text.anchor(0, 0);
+                text.pos(100, 3);
+                text;
+            });
+            
+            background.add({
+                final text = this.textMessage = new Text();
+                text.pointSize = 10;
+                text.anchor(0, 0);
+                text.pos(100, 24);
+                text.fitWidth = Project.TARGET_WIDTH - 110;
+                text;
+            });
+            
+            background;
         });
         
         this.add({
