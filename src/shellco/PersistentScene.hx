@@ -54,7 +54,7 @@ final class PersistentScene extends Scene {
             #if clay_web
             clay.Clay.app.runtime.window.style.cursor = "none";
             #elseif clay_sdl
-            sdl.SDL.showCursor(0);
+            // sdl.SDL.showCursor(0);
             #end
             
             cursor;
